@@ -1,8 +1,8 @@
 import '../css/App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import {Routes, Route } from 'react-router-dom';
 import Login from './Login';
-import User from './User';
+import Users from './Users';
 import Signup from './Signup'
 import Userprofile from './Userprofile'
 import Edituser from './Edituser'
@@ -15,30 +15,43 @@ import Makecomment from './Makecomment';
 import Comment from './Comment';
 import Editcomment from './Editcomment';
 import Appbar from './Appbar';
+import SearchTab from './SearchTab';
+import Searchprocess from './Searchprocess';
+import Problems from './Problems'
+import Comments from './Comments';
+import SearchTabtest from './SearchTabtest'
 
-
-const App : React.VFC = () => {
+const App: React.VFC = () => {
+  const [value, setValue] = useState(0);
+  
   return (
     <>
-      <Appbar/>
-      <Routes >
-        <Route path="/" element={<Login />}/>
-        <Route path="/login" element={<Login />} />
-        <Route path='/signup' element={<Signup/>} />
-        <Route path="/users" element={<User/>}/>
-        <Route path="/users/:id" element={<Userprofile />} />
-        <Route path="/users/:id/edit" element={<Edituser />} />
-        <Route path="/problems/new" element={<Makeproblem />} />
-        <Route path="/problems/:id/solutions/new" element={<Makesolution />} />
-        <Route path="/problems/:id" element={<Problem ifproblem={ true}/>}/>
-        <Route path="/solutions/:id" element={<Problem ifproblem={ false}/>}/>
-        <Route path="/problems/:id/edit" element={<Editproblem type='問題' ifproblem={true}/>}/>
-        <Route path="/solutions/:id/edit" element={<Editproblem type='解答' ifproblem={false}/>}/>
-        <Route path="/problems/:id/comments/new" element={<Makecomment/>}/>
-        <Route path="/solutions/:id/comments/new" element={<Makecomment/>}/>
-        <Route path="/comments/:id" element={<Comment/>}/>
-        <Route path="/comments/:id/edit" element={<Editcomment/>}/>
-      </Routes>
+      <Appbar />
+      
+        <Routes >
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/problems" element={<Problems/>}/>
+          <Route path="/users/:id" element={<Userprofile />} />
+          <Route path="/users/:id/edit" element={<Edituser />} />
+          <Route path="/problems/new" element={<Makeproblem />} />
+          <Route path="/problems/:id/solutions/new" element={<Makesolution />} />
+          <Route path="/problems/:id" element={<Problem ifproblem={true} />} />
+          <Route path="/solutions/:id" element={<Problem ifproblem={false} />} />
+          <Route path="/problems/:id/edit" element={<Editproblem type='問題' ifproblem={true} />} />
+          <Route path="/solutions/:id/edit" element={<Editproblem type='解答' ifproblem={false} />} />
+          <Route path="/problems/:id/comments/new" element={<Makecomment />} />
+          <Route path="/solutions/:id/comments/new" element={<Makecomment />} />
+          <Route path="/comments/:id" element={<Comment />} />
+          <Route path="/comments/:id/edit" element={<Editcomment />} />
+          <Route path="/problems/:id/comments" element={<Comments ifproblem={true}/>}/>
+          <Route path="/solutions/:id/comments" element={<Comments ifproblem={false} />}/>
+          <Route path="/search" element={<SearchTab value={value} setValue={setValue}  />} />
+          <Route path="/searchprocess" element={<Searchprocess />} />
+          <Route path="/searchtab" element={<SearchTabtest/>}/>
+        </Routes>
     </>
   );
 }

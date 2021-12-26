@@ -5,6 +5,7 @@ import dataFetch from './DataFetch';
 import { url } from './url';
 import { useParams } from 'react-router-dom';
 import Loading from './Loading';
+import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
 
 
@@ -12,8 +13,10 @@ const Userwrapper = styled.div`
     display: grid;
     grid-template-columns: 120px, 1fr;
     grid-template-rows: 120px, 60px;
-    width: 100%;
+    width: 90%;
     height: 180px;
+    margin: 0 5% 0 5%;
+    border-bottom: 1px solid rgb(200,200,200);
 `
 const Imagewrapper = styled.div`
     grid-column-start: 1;
@@ -25,8 +28,8 @@ const Imagewrapper = styled.div`
     align-items: center;
 `
 const Image = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     object-fill: cover;
     border-radius: 50%;
 `
@@ -74,11 +77,11 @@ function Userprofile() {
     
     return (
         <>
+                {dataState.isLoading ?
+                        <Loadingwrapper><Loading/></Loadingwrapper>
+                    : 
             <Wrapper>
                 <Userwrapper>
-                {dataState.isLoading ?
-                        <Loading/>
-                    : <>
                         <Imagewrapper>
                             <Image src={dataState.post.user.image_url} />
                         </Imagewrapper>
@@ -89,10 +92,10 @@ function Userprofile() {
                         <Count>{dataState.post.followings}フォロー</Count>
                         <Count>{dataState.post.followers}フォロワー</Count>
                     </Countwrapper>
-                    </>
+                    </Userwrapper>
+                    </Wrapper>
+                    
                 }
-                </Userwrapper>
-            </Wrapper>
         
         </>
     )

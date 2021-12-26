@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, useMatch} from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,16 +17,8 @@ import Sidebar from './Sidebar';
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import InputBase from '@mui/material/InputBase';
-import Searchuser from './Searchuser';
 
-const Searchwrapper = styled.div`
-    width: 100vw;
-    position: fixed;
-    z-index: 5;
-    background: white;
-    height: 100vh;
-    
-`
+
 const SearchInput = styled(InputBase)`
     width: 100%;
     padding: 0;
@@ -43,8 +36,11 @@ const SearchInput = styled(InputBase)`
 
 function Appbar() {
     const [state, setState] = useState(false);
-    const [search, setSearch] = useState(false);
-    const [searchkeyword, setSearchkeyword] = useState('');
+    const navigate = useNavigate();
+    const ifsearch = useMatch('/search')
+    const ifsearchprocess = useMatch('/searchprocess')
+    const query = new URLSearchParams(useLocation().search)
+    const [search, setSearch] = useState(query.get('text'));
     const toggleDrawer = (open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) =>{
         if (
@@ -58,17 +54,35 @@ function Appbar() {
             setState( open );
         };
     const handlesearch = (b: boolean) => {
-        setSearch(b);
+        b ? navigate('/search?keyword=') : navigate(-1)
     };
-    const handlechangekeyword = (e: any) => {
-        setSearchkeyword(e.target.value);
+    const handlechangekeyword = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setSearch(e.target.value)
     };
+    const handlesubmit = () => {
+        navigate('/searchprocess',{replace: true})
+        window.setTimeout(() => { navigate('/search?keyword=' + search, { replace: true }) },500)
+    }
+    const handlekeypress = (e: any) => {
+        if (e.key === 'Enter') { 
+            handlesubmit()
+        }
+    }
+    useEffect(() => {
+        const element = document.querySelector('input')
+        if (element) {
+            element.focus();
+        }
+        if (search) {
+            setSearch('')
+        }
+    },[])
 
     return (<>
-        <AppBar position="static" color="transparent" sx={{zIndex: '10'}}>
+        <AppBar position="sticky"  sx={{height: '64px', bgcolor: 'white',zIndex: '10', boxShadow: '0 1px 5px rgb(200,200,200)' ,color: 'rgb(100,100,100)'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {search ?
+                    {(ifsearch || ifsearchprocess) ?
                         <>
                             <IconButton
                                     size="large"
@@ -80,8 +94,11 @@ function Appbar() {
                                 >
                                 <ArrowBackIcon  />
                             </IconButton>
-                            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                                <SearchInput onChange={(e) => {handlechangekeyword(e)}} placeholder="検索キーワード..." />
+                            <Box sx={{ flexGrow: 1, display: 'flex' }}>
+                                <SearchInput onChange={(e) => { handlechangekeyword(e) }} placeholder="検索キーワード..." defaultValue={ query.get('keyword')} onKeyPress={e => {handlekeypress(e)}} />
+                                <IconButton sx={{ p: 0, marginLeft: '10px' }} onClick={handlesubmit}>
+                                    <SearchIcon />
+                                </IconButton>
                             </Box>
                         </> : <>
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}  >
@@ -107,7 +124,7 @@ function Appbar() {
                     
 
                         <Box sx={{ flexGrow: 0, position: { xs: 'static', md: 'absolute' }, right: '20px' }}>
-                            <IconButton sx={{ p: 0, marginRight: '5px' }} onClick={() => { handlesearch(true) }}>
+                                <IconButton sx={{ p: 0, marginRight: '5px', display: { xs: 'static',md: 'none'}}} onClick={() => { handlesearch(true) }}>
                                 <SearchIcon />
                             </IconButton>
                             <IconButton sx={{ p: 0 }}>
@@ -119,10 +136,7 @@ function Appbar() {
             </Container>
             <Sidebar state={state} setState={setState} toggleDrawer={toggleDrawer} />
             </AppBar>
-            {search && <>
-            <Searchwrapper />
-            <Searchuser keyword={searchkeyword}/>
-    </>}
+            
     </>
     );
     };

@@ -12,7 +12,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
-import { useLocation } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -24,9 +23,11 @@ const Loading2 = styled(Loading)`
 `
 
 
+interface Props {
+    keyword: String
+}
 
-
-function Searchuser() {
+function Searchusersub(props: Props) {
     const [times, setTimes] = useState(0);
     const search_url = url + '/users/search/';
     const [users,setUsers] = useState<any[]>([])
@@ -35,11 +36,11 @@ function Searchuser() {
     const [disable, setDisable] = useState(false);
     var real_url = ''
     
-    const query = new URLSearchParams(useLocation().search)
     
     useEffect(() => {
+        setLoad(true)
         setTimes(0)
-        real_url = search_url + 0 + '/' + query.get('keyword');
+        real_url = search_url + 0 + '/'+props.keyword;
         axios.get(real_url).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
@@ -50,13 +51,13 @@ function Searchuser() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [props.keyword]);
     
     
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times+1) + '/' + query.get('keyword');
+        real_url = search_url + String(times+1) + '/'+props.keyword ;
         setTimes(times + 1)
         console.log(users)
         axios.get(real_url).then(resp => {
@@ -114,4 +115,4 @@ function Searchuser() {
     )
 }
 
-export default Searchuser
+export default Searchusersub

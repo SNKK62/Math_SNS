@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from './axios';
 import { url } from './url';
 import Loading from './Loading';
+import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
@@ -15,8 +16,10 @@ const Userwrapper = styled.div`
 display: grid;
 grid-template-columns: 120px, 1fr;
 grid-template-rows: 120px, 60px;
-width: 100%;
+width: 90%;
 height: 180px;
+margin: 0 5% 0 5%;
+border-bottom: 1px solid rgb(200,200,200);
 
 `
 const Imagewrapper = styled.div`
@@ -82,6 +85,7 @@ const Images = styled.img`
 `
 const Description = styled.div`
     white-space: pre-wrap;
+    word-wrap: break-word;
     width: 80%;
     margin: auto;
     text-align: left;
@@ -141,10 +145,10 @@ function Problem(props: Propsstate) {
         dispatch({type: 'init', payload: ''})
         navigate('/problems/'+dataState.post.problem.problem_id)
     }
-    return (
-        <Wrapper>
-            {dataState.isLoading ?
-                <Loading /> : <>
+    return (<>
+        {dataState.isLoading ?
+           <Loadingwrapper><Loading /></Loadingwrapper> : 
+            <Wrapper>
             <Userwrapper>
                 <Imagewrapper>
                         <Image src={dataState.post.user_image}/>
@@ -184,9 +188,9 @@ function Problem(props: Propsstate) {
                                     </Problemimage>}
                             </Slide>}
             </Slidewrapper>
-            </>}
-        </Wrapper>
-    )
+            </Wrapper>
+            }
+    </>)
 }
 
 export default Problem

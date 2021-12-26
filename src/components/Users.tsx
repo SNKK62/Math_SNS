@@ -12,7 +12,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
-import { useLocation } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,11 +34,10 @@ function Searchuser() {
     const [disable, setDisable] = useState(false);
     var real_url = ''
     
-    const query = new URLSearchParams(useLocation().search)
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/' + query.get('keyword');
+        real_url = search_url + 0 + '/' ;
         axios.get(real_url).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
@@ -56,7 +54,7 @@ function Searchuser() {
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times+1) + '/' + query.get('keyword');
+        real_url = search_url + String(times + 1) + '/';
         setTimes(times + 1)
         console.log(users)
         axios.get(real_url).then(resp => {

@@ -4,7 +4,6 @@ import React from 'react'
 const Isload = styled.div`
     position: relative;
     top: 40vh;
-    color: #blue;
     display: flex;
     justify-content: center;
     font-size: 45px;

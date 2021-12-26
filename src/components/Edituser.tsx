@@ -2,10 +2,11 @@ import axios from './axios';
 import styled from 'styled-components';
 import { TextField } from '@material-ui/core';
 import { LoadingButton } from '@mui/lab';
-import { useState, useRef,useEffect, useReducer } from 'react';
+import { useState, useEffect, useReducer, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { url } from './url';
 import Loading from './Loading';
+import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
 import newuserimage from '../newuserimage.png';
 import Wrapper from './Wrapper';
@@ -47,6 +48,7 @@ const Filebutton = styled.label`
     width: 70px;
     height: 70px;
     border-radius: 50%;
+    cursor: pointer;
 `
 const Filewrapper = styled.div`
     width: 100%;
@@ -65,6 +67,7 @@ const Defaultdiv = styled.div`
     align-items: center;
     border: 1px black solid;
     padding: 5px 0 5px 0;
+    cursor: pointer;
 `
 const initialState = {
     isLoading: true,
@@ -78,9 +81,7 @@ function Edituser() {
     const { id } = useParams();
     const user_url = url + '/users/' +  id ;
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
-    const Nameref = useRef(null);
-    const Passref = useRef(null);
-    const Passconfref = useRef(null);
+    const [name, setName] = useState('');
     const Imageref = useRef(null);
     const [imgurl, setImgurl] = useState('');
     const navigate = useNavigate();
@@ -88,6 +89,7 @@ function Edituser() {
     useEffect(() => {
         axios.get(user_url).then(resp => {
             setImgurl(resp.data.user.image_url);
+            setName(resp.data.user.name)
             dispatch({ type: 'success', payload: resp.data });
         }).catch(e => {
             console.log(e);
@@ -105,14 +107,9 @@ function Edituser() {
     }
     const handle = () => {
         setLoading(true);
-        const name: any = Nameref.current;
-        const pass: any = Passref.current;
-        const passconf: any = Passconfref.current;
         const image: any = Imageref.current;
         const data = new FormData();
-        data.append('user[name]', name.childNodes[1].childNodes[0].value)
-        data.append('user[password]', pass.childNodes[1].childNodes[0].value)
-        data.append('user[password_confirmation]', passconf.childNodes[1].childNodes[0].value)
+        data.append('user[name]', name)
         console.log(!image.files[0])
         if (ifdefault == 'default') {
             data.append('user[image]', 'default');  
@@ -129,14 +126,19 @@ function Edituser() {
             console.log(e.response.error);
             setLoading(false);
         })
-
     }
+
+    const handlename = (e: any) => {
+        setName(e.target.childNodes[1].childNodes[0].value) 
+    }
+    
     return (
         <>
+            {dataState.isLoading ? 
+                <Loadingwrapper>
+                    <Loading></Loading> 
+                </Loadingwrapper> :
             <Wrapper>
-                {dataState.isLoading ? 
-                    <Loading></Loading> :
-                <>
                     <Message>
                         Edit
                     </Message>
@@ -148,20 +150,14 @@ function Edituser() {
                     </Filewrapper>
                     <Defaultdiv onClick={defaulthandle} >デフォルトの画像を使用する</Defaultdiv>
                     <Textwrapper>
-                        <Textinput id='name' ref={Nameref} error={false} label="Name" variant="standard"/>
+                        <Textinput id='name' error={false} label="Name" variant="standard" onClick={e => { handlename(e) }} defaultValue={dataState.post.user.name} />
                     </Textwrapper>
-                    <Textwrapper>
-                        <Textinput id='password' type='password' ref={Passref} error={false} label="Password" variant="standard"  />
-                    </Textwrapper>
-                    <Textwrapper>
-                        <Textinput id='password_confirmation' type='password' ref={Passconfref} error={false} label="Password_Confirmation" variant="standard"  />
-                    </Textwrapper>    
+                       
                     <Buttonwrapper>
                         <Button loading={loading} onClick={handle} variant="outlined" >変更</Button>
                     </Buttonwrapper>
-                </>
-            }
                 </Wrapper>
+            }
                 
                 
                 </>

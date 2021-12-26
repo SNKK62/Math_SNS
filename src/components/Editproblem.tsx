@@ -10,6 +10,7 @@ import {green, blue, red} from '@mui/material/colors';
 import { url } from './url';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from './Loading';
+import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
 
 
@@ -212,9 +213,9 @@ function Editproblem(props: Props) {
     
     return (
         <>
-        <Wrapper>
         {
-            dataState.isLoading ? <Loading /> : <>
+            dataState.isLoading ? <Loadingwrapper><Loading /></Loadingwrapper> : 
+                <Wrapper>
                         <Message>
                             {props.type}の編集
                         </Message>
@@ -335,8 +336,8 @@ function Editproblem(props: Props) {
                         <Fileinput type='file' accept='images/*' id='2' onChange={(e) => { handlecircular(1); handlechange(e,2) }} />
                         <Fileinput type='file' accept='images/*' id='3' onChange={(e) => { handlecircular(2); handlechange(e,3) }} />
                         <Submitbutton loading={load} onClick={handle} variant='contained' sx={{ marginTop: '100px' }} >変更</Submitbutton>
-                    </>}
                     </Wrapper>
+                    }
             
                 </>
     )

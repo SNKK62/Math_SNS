@@ -26,10 +26,11 @@ const Loading2 = styled(Loading)`
 
 
 
-function Searchuser() {
+
+function Searchproblem() {
     const [times, setTimes] = useState(0);
-    const search_url = url + '/users/search/';
-    const [users,setUsers] = useState<any[]>([])
+    const search_url = url + '/problems/search/';
+    const [problems,setProblems] = useState<any[]>([])
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
@@ -41,7 +42,7 @@ function Searchuser() {
         setTimes(0)
         real_url = search_url + 0 + '/' + query.get('keyword');
         axios.get(real_url).then(resp => {
-            setUsers([...resp.data.user]);
+            setProblems([...resp.data.problem]);
             setLoad(false)
             if (resp.data.ifend) {
                 setDisable(true)
@@ -58,9 +59,8 @@ function Searchuser() {
         setCircular(true)
         real_url = search_url + String(times+1) + '/' + query.get('keyword');
         setTimes(times + 1)
-        console.log(users)
         axios.get(real_url).then(resp => {
-            setUsers([...users,...resp.data.user]);
+            setProblems([...problems,...resp.data.problem]);
             setCircular(false)
             if (resp.data.ifend) {
                 setDisable(true)
@@ -73,7 +73,6 @@ function Searchuser() {
 
     return (
         <>
-        
             {load ? 
             <Loadingwrapper>
                 <Loading2 />
@@ -82,16 +81,15 @@ function Searchuser() {
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
-                        {users.map((val: any) => {
+                        {problems.map((val: any) => {
                             return (<>
                                 <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
                                     <ListItem  key={val.id.to_String+'item'} sx={{ height: '90px', padding: '0' }}>
-                                        <Avatar key={val.id.to_String+'avatar'} alt={val.name} src={val.image_url} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
+                                        <Avatar key={val.id.to_String+'avatar'} alt={val.user_name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
                                         <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
-                                            <ListItemText  key={val.id.to_String+'item1'} primary={val.name} primaryTypographyProps={{ fontSize: '23px', paddingLeft: '10px', textAlign: 'center',paddingTop: '5px' }} />
+                                            <ListItemText  key={val.id.to_String+'item1'} primary={val.user_name} primaryTypographyProps={{ fontSize: '18px', paddingLeft: '25px',paddingTop: '5px' }} />
                                             <Divider key={val.id.to_String+'divider1'} />
-                                            <ListItemText key={val.id.to_String+'item2'} primary={val.problem_count + '投稿 ' + val.solution_count + '解答'} primaryTypographyProps={{ fontSize: '14px', paddingLeft: '5px' }} />
-                                            <ListItemText key={val.id.to_String+'item3'} primary={val.follower_count + 'フォロワー ' + val.following_count + 'フォロー'} primaryTypographyProps={{ fontSize: '14px', paddingLeft: '5px' }} />
+                                            <ListItemText key={val.id.to_String+'item3'} primary={'#'+val.category} primaryTypographyProps={{ fontSize: '14px', paddingLeft: '30px', color: 'blue' }} />
                                         </List>
                                     </ListItem>
                                 </ListItemButton>
@@ -101,7 +99,7 @@ function Searchuser() {
                         })}
                         <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '0' }}>
                         {!circular ? 
-                        <Fab disabled={disable} aria-label="add" sx={{  border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll} >
+                        <Fab disabled={disable} aria-label="add" sx={{  border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll}>
                             <AddIcon  />
                             </Fab> : 
                             <CircularProgress sx={{margin: 'auto'}} />
@@ -114,4 +112,4 @@ function Searchuser() {
     )
 }
 
-export default Searchuser
+export default Searchproblem

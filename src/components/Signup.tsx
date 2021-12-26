@@ -126,7 +126,7 @@ const Signup: React.VFC = () => {
             <Inputwrapper><Input ref={Passconfref} error={false} label="Password Confirmation" variant="outlined" type='password' /></Inputwrapper>
             
             
-            <Button　loading={load} onClick={handle} variant="outlined" >
+            <Button loading={load} onClick={handle} variant="outlined" >
                 Create
             </Button>
         </Wrapper>
