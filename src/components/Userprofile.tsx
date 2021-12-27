@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect ,useReducer} from 'react';
+import { useEffect ,useReducer, useState} from 'react';
 import axios from './axios';
 import dataFetch from './DataFetch';
 import { url } from './url';
@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
+import { LoadingButton } from '@mui/lab';
+
 
 
 const Userwrapper = styled.div`
@@ -44,15 +46,17 @@ const Username = styled.div`
     font-size: 35px;
 `
 const Countwrapper = styled.div`
-    grid-column-start: 2;
-    grid-column-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 3;
-    display: flex;
-    justify-content: center;
 `
-const Count = styled.span`
-
+const Count = styled.div`
+    margin: center
+`
+const Followbutton = styled.div`
+    column: 2/3;
+    row: 2/3;
 `
 
 
@@ -62,10 +66,20 @@ const initialState = {
     post: {}
 };
 
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
 
-function Userprofile() {
+function Userprofile(props: Props) {
     const { id } = useParams()
+    const [load, setLoad] = useState(false)
     const user_url = url + '/users/' + id
+    const [follow, setFollow] = useState(false)
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
     useEffect(() => {
         axios.get(user_url).then(resp => {
@@ -73,7 +87,40 @@ function Userprofile() {
         }).catch(e => {
             console.log(e);
         })
+        if (props.logged_in.bool && props.logged_in.id != Number(id)) {
+            axios.get(url + '/users/iffollow/' + id).then(resp => {
+                setFollow(resp.data.follow)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
     }, [])
+    const handlefollow = (bool: boolean) => {
+        setLoad(true)
+        if (bool) {
+            axios.post(url + '/users/follow/' + id).then(() => {
+                setFollow(true)
+                setLoad(false)
+                const element: any = document.getElementById('follower')
+                if (element) {
+                    element.textContent = String(Number(element.textContent[0])+1)+'フォロワー'
+                }
+            }).catch(e => {
+                console.log(e)
+            })
+        } else {
+            axios.delete(url + '/users/unfollow/' + id).then(() => {
+                setFollow(false)
+                setLoad(false)
+                const element: any = document.getElementById('follower')
+                if (element) {
+                    element.textContent = String(Number(element.textContent[0])-1)+'フォロワー'
+                }
+            }).catch(e => {
+                console.log(e)
+            })
+        }
+    }
     
     return (
         <>
@@ -90,8 +137,16 @@ function Userprofile() {
                     </Username>
                     <Countwrapper>
                         <Count>{dataState.post.followings}フォロー</Count>
-                        <Count>{dataState.post.followers}フォロワー</Count>
+                        <Count id='follower'>{dataState.post.followers}フォロワー</Count>
                     </Countwrapper>
+                    {(props.logged_in.bool && props.logged_in.id != Number(id)) &&
+                        <Followbutton>
+                            {follow ? 
+                                <LoadingButton loading={load} variant='outlined' onClick={() => {handlefollow(false)}}>フォロー解除</LoadingButton> :
+                                <LoadingButton loading={load} variant='contained' onClick={() => {handlefollow(true)}} >フォロー</LoadingButton>    
+                        }
+                        </Followbutton>
+                    }
                     </Userwrapper>
                     </Wrapper>
                     

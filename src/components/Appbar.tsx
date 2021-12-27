@@ -32,9 +32,17 @@ const SearchInput = styled(InputBase)`
     display: flex;
     align-items: center;
 `
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    };
+    handledelete: () => void 
+}
 
-
-function Appbar() {
+function Appbar(props: Props) {
     const [state, setState] = useState(false);
     const navigate = useNavigate();
     const ifsearch = useMatch('/search')
@@ -124,17 +132,18 @@ function Appbar() {
                     
 
                         <Box sx={{ flexGrow: 0, position: { xs: 'static', md: 'absolute' }, right: '20px' }}>
-                                <IconButton sx={{ p: 0, marginRight: '5px', display: { xs: 'static',md: 'none'}}} onClick={() => { handlesearch(true) }}>
+                            <IconButton sx={{ p: 0, marginRight: '5px', display: { xs: 'static',md: 'none'}}} onClick={() => { handlesearch(true) }}>
                                 <SearchIcon />
                             </IconButton>
-                            <IconButton sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="" />
-                            </IconButton>
+                                {props.logged_in.bool &&
+                                    <IconButton sx={{ p: 0 }}>
+                                        <Avatar alt="ユーザー" src={props.logged_in.image} />
+                                    </IconButton>}
                         </Box>
                     </>}
                 </Toolbar>
             </Container>
-            <Sidebar state={state} setState={setState} toggleDrawer={toggleDrawer} />
+            <Sidebar state={state} setState={setState} toggleDrawer={toggleDrawer} logged_in={props.logged_in} handledelete={props.handledelete}/>
             </AppBar>
             
     </>

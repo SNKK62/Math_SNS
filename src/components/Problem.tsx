@@ -11,6 +11,9 @@ import Wrapper from './Wrapper';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 
 const Userwrapper = styled.div`
 display: grid;
@@ -19,8 +22,6 @@ grid-template-rows: 120px, 60px;
 width: 90%;
 height: 180px;
 margin: 0 5% 0 5%;
-border-bottom: 1px solid rgb(200,200,200);
-
 `
 const Imagewrapper = styled.div`
 grid-column-start: 1;
@@ -98,6 +99,10 @@ const Slide = styled(Slider)`
     height: 200px;
     margin: auto;
 `
+const Buttonwrapper = styled.div`
+    column: 2/3;
+    row: 2/3;
+`
 const Slidewrapper = styled.div`
     width: 80%;
     margin: auto;
@@ -115,6 +120,12 @@ const initialState = {
 };
 interface Propsstate {
     ifproblem: boolean;
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
 };
 
 const settings = {
@@ -145,6 +156,17 @@ function Problem(props: Propsstate) {
         dispatch({type: 'init', payload: ''})
         navigate('/problems/'+dataState.post.problem.problem_id)
     }
+    const toedit = () => {
+        navigate('/problems/'+id+'/edit')
+    }
+    const handledelete = () => {
+        dispatch({type: 'init', payload: ''})
+        axios.delete(url + '/problems/' + id).then(() => {
+            navigate('/users/'+props.logged_in.id,{replace: true})
+        }).catch (e => {
+            console.log(e)
+        })
+    }
     return (<>
         {dataState.isLoading ?
            <Loadingwrapper><Loading /></Loadingwrapper> : 
@@ -155,6 +177,14 @@ function Problem(props: Propsstate) {
                 </Imagewrapper>
                     <Username>{dataState.post.user_name}</Username>
                         {props.ifproblem ? <Tagwrapper>#{dataState.post.problem.category}</Tagwrapper> : <Towrapper onClick={toproblem}>問題を見る</Towrapper>}
+                {dataState.post.problem.user_id == props.logged_in.id && <Buttonwrapper>
+                    <IconButton onClick={toedit}>
+                        <EditIcon/>        
+                    </IconButton>
+                    <IconButton onClick={handledelete} sx={{color: 'red'}}>
+                        <DeleteForeverIcon/>
+                    </IconButton>    
+                </Buttonwrapper>}
             </Userwrapper>
             <Description>{dataState.post.problem.description}</Description>
             <Slidewrapper>

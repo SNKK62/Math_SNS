@@ -8,6 +8,9 @@ import { url } from './url';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 
 
 const Userwrapper = styled.div`
@@ -76,6 +79,10 @@ const Description = styled.div`
     margin-bottom: 40px;
     padding: 15px 10px 0 35px;
 `
+const Buttonwrapper = styled.div`
+    column: 2/3;
+    row: 2/3;
+`
 
 const initialState = {
     isLoading: true,
@@ -83,8 +90,16 @@ const initialState = {
     post: {}
 };
 
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
 
-function Comment() {
+function Comment(props: Props) {
     const { id } = useParams()
     const comment_url = url + '/comments/' + id 
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
@@ -104,6 +119,17 @@ function Comment() {
             navigate('/solutions/'+dataState.post.comment.solution_id)
         }
     }
+    const toedit = () => {
+        navigate('/comments/'+id+'/edit')
+    }
+    const handledelete = () => {
+        dispatch({ type: 'init', payload: '' })
+        axios.delete(url + '/comments/' + id).then(() => {
+            navigate('/users/' + props.logged_in.id, { replace: true })
+        }).catch(e => {
+            console.log(e)
+        })
+    }
     return (<>
         {dataState.isLoading ?
             <Loadingwrapper><Loading /></Loadingwrapper> : 
@@ -116,7 +142,15 @@ function Comment() {
                         {dataState.post.comment.problem_id ? 
                        <Towrapper onClick={toproblem}>問題に戻る</Towrapper>:
                        <Towrapper onClick={toproblem}>解答に戻る</Towrapper>
-                }
+                    }
+                    {props.logged_in.id != dataState.post.comment.user_id && <Buttonwrapper>
+                        <IconButton onClick={toedit}>
+                            <EditIcon/>
+                        </IconButton>
+                        <IconButton sx={{color: 'red'}} onClick={handledelete}>
+                            <DeleteForeverIcon />
+                        </IconButton>
+                    </Buttonwrapper>}
             </Userwrapper>
             <Description>{dataState.post.comment.text}</Description>
         </Wrapper>

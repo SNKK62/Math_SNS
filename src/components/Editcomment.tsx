@@ -35,8 +35,16 @@ const initialState = {
     isError: '',
     post: {}
 };
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
 
-function Editcomment() {
+function Editcomment(props: Props) {
     const { id } = useParams()
     const get_url = url + '/comments/' + id;
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
@@ -48,6 +56,9 @@ function Editcomment() {
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(get_url).then(resp => {
+            if (props.logged_in.id != resp.data.comment.user_id) {
+                navigate('/comments/'+id, {replace: true})
+            }
             setTextarea(resp.data.comment.text);
             dispatch({ type: 'success', payload: resp.data })
         }).catch(e => {

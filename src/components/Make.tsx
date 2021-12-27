@@ -16,6 +16,12 @@ interface Props  {
     type: string;
     onClickfunction?: void;
     ifproblem: boolean;
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
 }
 const Fileinput = styled.input`
     display: none;
@@ -82,6 +88,10 @@ function Make(props: Props) {
     const navigate = useNavigate();
     const { id } = useParams();
     useEffect(() => {
+        if (!props.logged_in.bool) {
+            navigate('/login',{replace: true})
+            return 
+        }
         return() => {
             clearTimeout(timer.current);
         };

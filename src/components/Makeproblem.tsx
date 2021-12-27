@@ -1,8 +1,17 @@
 import Make from './Make';
 
-function Makeproblem() {
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
+
+function Makeproblem(props: Props) {
     return (
-     <Make type='問題' ifproblem={true}/>       
+     <Make type='問題' ifproblem={true} logged_in={props.logged_in}/>       
     )
 }
 

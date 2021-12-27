@@ -18,6 +18,12 @@ interface Props  {
     type: string;
     onClickfunction?: void;
     ifproblem: boolean;
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
 }
 const Fileinput = styled.input`
     display: none;
@@ -90,6 +96,10 @@ function Editproblem(props: Props) {
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(get_url).then(resp => {
+            if (resp.data.problem.user_id != props.logged_in.id) {
+                navigate('/problems/' + id, { replace: true })
+                return 
+            }
             if (resp.data.problem.image1_url || resp.data.problem.image1s_url) {
                 setImage1('1')
                 if (resp.data.problem.image2_url || resp.data.problem.image2s_url) {

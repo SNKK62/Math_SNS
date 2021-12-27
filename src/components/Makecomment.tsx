@@ -2,7 +2,7 @@ import axios from './axios';
 import { url } from './url';
 import styled from 'styled-components';
 import Wrapper from './Wrapper';
-import { useRef,  useState } from 'react';
+import { useRef,  useState, useEffect } from 'react';
 import { useNavigate, useParams, useMatch } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 
@@ -27,9 +27,16 @@ const Submitbutton = styled(LoadingButton)`
     width: 100px;
     margin: 60px auto 0 auto;
 `
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
 
-
-function Makecomment() {
+function Makecomment(props: Props) {
     const textref = useRef(null);
     const [load, setLoad] = useState(false);
     const navigate = useNavigate();
@@ -37,6 +44,11 @@ function Makecomment() {
     const match = useMatch('/problems/:id/comments/new');
     var create_url = ''
     
+    useEffect(() => {
+        if (!props.logged_in.bool) {
+            navigate('/login',{replace: true})
+        }
+    },[])
     
     const handle = () => {
         setLoad(true);

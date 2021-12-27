@@ -74,8 +74,15 @@ const initialState = {
     isError: '',
     post: {}
 };
-
-function Edituser() {
+interface Props {
+    logged_in: {
+        bool: boolean,
+        id: number,
+        image: string,
+        name: string
+    }
+}
+function Edituser(props: Props) {
     const [loading, setLoading] = useState(false);
     const [ifdefault, setIfdefault] = useState('nondefault');
     const { id } = useParams();
@@ -87,6 +94,10 @@ function Edituser() {
     const navigate = useNavigate();
     
     useEffect(() => {
+        if (!props.logged_in.bool || props.logged_in.id != Number(id)) {
+            navigate('/usres/' + props.logged_in.id + '/edit',{replace: true})
+            return
+        }
         axios.get(user_url).then(resp => {
             setImgurl(resp.data.user.image_url);
             setName(resp.data.user.name)
@@ -94,7 +105,7 @@ function Edituser() {
         }).catch(e => {
             console.log(e);
         })
-    }, [])
+    }, [id])
     const imghandle = (e:any) => {
         if (e.target.files[0]) {
             setIfdefault('nondefault');
