@@ -11,15 +11,17 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar'
 import ListItemButton from '@mui/material/ListItemButton';
 import styled from 'styled-components';
-import Loading from './Loading';
-import Loadingwrapper from './Loadingwrapper';
 import {useParams} from 'react-router-dom'
 
-const Loading2 = styled(Loading)`
-    height: 100%;
-    width: 100%;
-`
 
+
+const Textwrapper = styled.div`
+    width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 5px 0 5px 10px;
+    font-size: 14px;
+`
 
 interface Props {
     ifproblem: boolean
@@ -28,14 +30,19 @@ interface Props {
 function Comments(props: Props) {
     const {id} = useParams()
     const [times, setTimes] = useState(0);
-    const search_url = props.ifproblem ? url + '/problems/' + String(id) + '/comments/' : url + '/solutions/' + String(id) + '/comments';
+    const search_url = props.ifproblem ? url + '/problems/' + id + '/comments/' : url + '/solutions/' + id + '/comments';
     const [comments,setComments] = useState<any[]>([])
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
     var real_url = ''
 
+    
+
     useEffect(() => {
+        if (!load) {
+            setLoad(true)
+        }
         setTimes(0)
         real_url = search_url + 0 + '/' ;
         axios.get(real_url).then(resp => {
@@ -48,7 +55,7 @@ function Comments(props: Props) {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [props.ifproblem]);
     
     
     const handlescroll = () => {
@@ -68,22 +75,21 @@ function Comments(props: Props) {
     return (
         <>
           {load ? 
-            <Loadingwrapper>
-                <Loading2 />
-            </Loadingwrapper>
+            <CircularProgress/>
             :
             <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
                         {comments.map((val: any) => {
                             return (<>
                                 <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
-                                    <ListItem  key={val.id.to_String+'item'} sx={{ height: '90px', padding: '0' }}>
+                                    <ListItem  key={val.id.to_String+'item'} sx={{ padding: '0' }}>
                                         <Avatar key={val.id.to_String+'avatar'} alt={val.user_name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
                                         <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
                                             <ListItemText  key={val.id.to_String+'item1'} primary={val.user_name} primaryTypographyProps={{ fontSize: '18px', paddingLeft: '25px',paddingTop: '5px' }} />
                                             <Divider key={val.id.to_String + 'divider1'} />
-                                        <ListItemText  key={val.id.to_String+'item3'} primary={val.text} primaryTypographyProps={{ fontSize: '15px', paddingLeft: '10px', paddingTop: '5px' ,color: 'rgb(100,100,100)',width: '100%',whiteSpace: 'pre-wrap',}} />
-                                            
+                                            <Textwrapper>
+                                                {val.text}
+                                            </Textwrapper>
                                         </List>
                                     </ListItem>
                                     <Divider />

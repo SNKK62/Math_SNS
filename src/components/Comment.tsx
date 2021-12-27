@@ -11,6 +11,7 @@ import Wrapper from './Wrapper';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Button from '@mui/material/Button';
 
 
 const Userwrapper = styled.div`
@@ -48,18 +49,7 @@ display: flex;
 align-items: center;
 font-size: 35px;
 `
-const Towrapper = styled.div`
-grid-column-start: 1;
-grid-column-end: 2;
-grid-row-start: 2;
-grid-row-end: 3;
-display: flex;
-justify-content: center;
-align-items: center;
-color: blue;
-text-decoration: underline;
-cursor: pointer;
-`
+
 // const Problemimage = styled.div`
 //     margin: auto;
 //     width: 80%;
@@ -140,8 +130,8 @@ function Comment(props: Props) {
                 </Imagewrapper>
                     <Username>{dataState.post.user_name}</Username>
                         {dataState.post.comment.problem_id ? 
-                       <Towrapper onClick={toproblem}>問題に戻る</Towrapper>:
-                       <Towrapper onClick={toproblem}>解答に戻る</Towrapper>
+                       <Button variant='text' sx={{width: '30%'}} onClick={toproblem}>問題に戻る</Button>:
+                       <Button variant='text' sx={{width: '30%'}} onClick={toproblem}>解答に戻る</Button>
                     }
                     {props.logged_in.id != dataState.post.comment.user_id && <Buttonwrapper>
                         <IconButton onClick={toedit}>

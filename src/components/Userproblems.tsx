@@ -1,6 +1,3 @@
-import styled from 'styled-components';
-
-// import Typography from '@mui/material/Typography';
 import  { useState, useEffect} from 'react';
 import axios from './axios';
 import { url } from './url';
@@ -9,25 +6,20 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
-import Avatar from '@mui/material/Avatar';
-import Loading from './Loading';
-import Loadingwrapper from './Loadingwrapper';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
-
-
-const Loading2 = styled(Loading)`
-    height: 100%;
-    width: 100%;
-`
+import { useParams } from 'react-router-dom';
 
 
 
 
-function Problems() {
+
+
+
+function Userproblems() {
+    const { id } = useParams();
     const [times, setTimes] = useState(0);
-    const search_url = url + '/problems/search/';
     const [problems,setProblems] = useState<any[]>([])
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
@@ -36,7 +28,7 @@ function Problems() {
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/';
+        real_url = url+'/users/'+id+'/problems/' + '0';
         axios.get(real_url).then(resp => {
             setProblems([...resp.data.problem]);
             setLoad(false)
@@ -53,7 +45,7 @@ function Problems() {
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times + 1) + '/';
+        real_url = url+'/users/'+id+'/problems/'+String(times + 1);
         setTimes(times + 1)
         axios.get(real_url).then(resp => {
             setProblems([...problems,...resp.data.problem]);
@@ -71,9 +63,7 @@ function Problems() {
         <>
         
             {load ? 
-            <Loadingwrapper>
-                <Loading2 />
-            </Loadingwrapper>
+            <CircularProgress/>
             :
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
@@ -81,13 +71,8 @@ function Problems() {
                         {problems.map((val: any) => {
                             return (<>
                                 <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
-                                    <ListItem  key={val.id.to_String+'item'} sx={{ height: '90px', padding: '0' }}>
-                                        <Avatar key={val.id.to_String+'avatar'} alt={val.name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
-                                        <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
-                                            <ListItemText  key={val.id.to_String+'item1'} primary={val.user_name} primaryTypographyProps={{ fontSize: '18px', paddingLeft: '30px',paddingTop: '5px' }} />
-                                            <Divider key={val.id.to_String+'divider1'} />
-                                            <ListItemText key={val.id.to_String+'item2'} primary={'#'+val.category } primaryTypographyProps={{ fontSize: '14px', paddingLeft: '30px', color: 'blue' }} />
-                                        </List>
+                                    <ListItem  key={val.id.to_String+'item'} sx={{ height: '50px', padding: '0' }}>
+                                        <ListItemText key={val.id.to_String+'item2'} primary={'#'+val.category } primaryTypographyProps={{ fontSize: '14px', paddingLeft: '30px', color: 'blue' }} />
                                     </ListItem>
                                 </ListItemButton>
                                 <Divider key={val.id.to_String+'divider2'}/>
@@ -109,4 +94,4 @@ function Problems() {
     )
 }
 
-export default Problems
+export default Userproblems

@@ -20,6 +20,7 @@ const Filewrapper = styled.label`
     width: 70px;
     height: 70px;
     border-radius: 50%;
+    cursor: pointer;
 `
 const Filewrapper2 = styled.div`
     width: 100px;
@@ -35,7 +36,7 @@ const Preview = styled.img`
 `
 const Inputwrapper = styled.div`
     width: 80%;
-    margin: 40px auto 40px auto;
+    margin: 40px auto 0 auto;
 `
 const Message = styled.div`
     font-size: 30px;
@@ -58,16 +59,37 @@ const Defaultdiv = styled.div`
     border-radius: 10px;
     padding: 5px 0 5px 0;
 `
+const Errortext = styled.div`
+    width: 80%;
+    margin: 0 auto 40px 0 auto;
+    color: red;
+`
 
 
+interface Props {
+    logged_in: {
+        bool: boolean
+        id: number
+        image: string
+        name: string
+    };
+    setLogged_in:React.Dispatch<React.SetStateAction<{
+        bool: boolean;
+        id: number;
+        image: string;
+        name: string;
+    }>>
+}
 
-
-const Signup: React.VFC = () => {
+const Signup: React.FC<Props> = (props) => {
     const Nameref = useRef(null);
     const Passref = useRef(null);
     const Passconfref = useRef(null);
     const Imageref = useRef(null);
     const navigate = useNavigate();
+    const [nameerror, setNameerror] = useState(false);
+    const [passerror, setPasserror] = useState(false);
+    const [passconferror, setPassconferror] = useState(false);
     
     const create_url: string = url + '/users';
     const [imgurl, setImgurl] = useState(newuserimage);
@@ -75,10 +97,32 @@ const Signup: React.VFC = () => {
     const [ifdefault, setIfdefault] = useState('default');
     const handle = () => {
         setLoad(true);
+        var error1 = false;
+        var error2 = false;
+        var error3 = false;
+        setNameerror(false);
+        setPasserror(false);
+        setPassconferror(false);
         const name: any = Nameref.current;
         const pass: any = Passref.current;
         const passconf: any = Passconfref.current;
         const image: any = Imageref.current;
+        if (!name || !name.childNodes[1].childNodes[0].value) {
+            error1 = true;
+            setNameerror(true)
+        }
+        if (!pass || pass.childNodes[1].childNodes[0].value.length<6) {
+            error2 = true;
+            setPasserror(true)
+        }
+        if (!passconf || pass.childNodes[1].childNodes[0].value != passconf.childNodes[1].childNodes[0].value) {
+            error3 = true;
+            setPassconferror(true)
+        }
+        if (error1 || error2 || error3) {
+            setLoad(false)
+            return 
+        }
         const data = new FormData()
         data.append('user[name]', name.childNodes[1].childNodes[0].value)
         data.append('user[password]', pass.childNodes[1].childNodes[0].value)
@@ -93,7 +137,12 @@ const Signup: React.VFC = () => {
         axios.post(create_url, data).then(resp => {
             setLoad(false)
             const id = resp.data.user.id
-            navigate('/users/' + id);
+            axios.get(url + '/logged_in').then(resp => {
+                props.setLogged_in(resp.data)
+                navigate('/users/' + id);
+            }).catch(e => {
+                console.log(e)
+            })
         }).catch(e => {
             
             console.log(e.response.data.error);
@@ -121,9 +170,12 @@ const Signup: React.VFC = () => {
                 <Fileinput  id='fileinput' ref={Imageref} type='file' accept="image/*" onChange={(e)=>{imghandle(e)}}/>
             </Filewrapper2>
             <Defaultdiv onClick={defaulthandle} >デフォルトの画像を使用する</Defaultdiv>
-            <Inputwrapper><Input ref={Nameref} error={false} label="Name" variant="outlined" /></Inputwrapper>
-            <Inputwrapper><Input  ref={Passref} error={false} label="Password" variant="outlined" type='password'/></Inputwrapper>
-            <Inputwrapper><Input ref={Passconfref} error={false} label="Password Confirmation" variant="outlined" type='password' /></Inputwrapper>
+            <Inputwrapper><Input ref={Nameref} error={nameerror} label="Name" variant="outlined" /></Inputwrapper>
+            {nameerror && <Errortext>その名前は使用されています</Errortext>}
+            <Inputwrapper><Input  ref={Passref} error={passerror} label="Password" variant="outlined" type='password'/></Inputwrapper>
+            {passerror && <Errortext>パスワードは６文字以上です</Errortext>}
+            <Inputwrapper><Input ref={Passconfref} error={passconferror} label="Password Confirmation" variant="outlined" type='password' /></Inputwrapper>
+            {passconferror && <Errortext>パスワード一致していません</Errortext>}
             
             
             <Button loading={load} onClick={handle} variant="outlined" >

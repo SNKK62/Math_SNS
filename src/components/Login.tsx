@@ -23,8 +23,22 @@ const Message = styled.div`
     font-size: 30px;
     margin: 30px auto;
 `
+interface Props {
+    logged_in: {
+        bool: boolean
+        id: number
+        image: string
+        name: string
+    };
+    setLogged_in: React.Dispatch<React.SetStateAction<{
+        bool: boolean;
+        id: number;
+        image: string;
+        name: string;
+    }>>
+}
 
-function Login() {
+function Login(props: Props) {
 
     const [load, setLoad] = useState(false);
     const Nameref = useRef(null);
@@ -42,7 +56,10 @@ function Login() {
         axios.post(login_url, data).then((resp) => {
             setLoad(false);
             const id = resp.data.id;
-            navigate('/users/'+ id);
+            axios.get(url + '/logged_in').then(resp => {
+                props.setLogged_in(resp.data)
+                navigate('/users/'+ id);
+            })
         }).catch((e) => {
             console.log(e);
             setLoad(false);

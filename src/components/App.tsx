@@ -52,9 +52,9 @@ const App: React.VFC = () => {
         <Appbar logged_in={logged_in} handledelete={handledelete }/>
       
         <Routes >
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path="/" element={logged_in.bool ? <Users/>: <Login logged_in={logged_in} setLogged_in={setLogged_in} />} />
+          <Route path="/login" element={<Login logged_in={logged_in} setLogged_in={setLogged_in} />} />
+          <Route path='/signup' element={<Signup logged_in={logged_in} setLogged_in={setLogged_in }/>} />
           <Route path="/users" element={<Users />} />
           <Route path="/problems" element={<Problems />} />
           <Route path="/users/:id" element={<Userprofile logged_in={logged_in} />} />

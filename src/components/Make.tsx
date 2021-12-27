@@ -40,7 +40,7 @@ const Filewrapper = styled.label`
 `
 const File3wrapper = styled.div`
     width: 80%;
-    margin: 30px auto 50px auto;
+    margin: 15px auto 60px auto;
 `
 const Textarea = styled.textarea`
     display: flex;
@@ -73,6 +73,10 @@ const Categorywrapper = styled.div`
 const Keyword = styled.div`
     position: absolute;
     left: 50px;
+`
+const Buttonwrapper = styled.div`
+    margin-top: 80px;
+    margin-bottom: 30px;
 `
 function Make(props: Props) {
     const textref = useRef(null);
@@ -301,7 +305,9 @@ function Make(props: Props) {
                 <Fileinput  type='file' accept='images/*' id='1' onChange={(e) => { handlecircular(0); handlechange(e) }} />
                 <Fileinput  type='file' accept='images/*' id='2' onChange={(e) => { handlecircular(1);  handlechange(e)}} />
                 <Fileinput  type='file' accept='images/*' id='3' onChange={(e) => { handlecircular(2);  handlechange(e)}} />
-                <Submitbutton loading={load} onClick={handle} variant='contained' sx={{marginTop: '100px'}} >投稿</Submitbutton>
+                <Buttonwrapper>
+                    <Submitbutton loading={load} onClick={handle} variant='contained' >投稿</Submitbutton>
+                </Buttonwrapper>
             </Wrapper>
             
         </>

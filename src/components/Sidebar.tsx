@@ -54,12 +54,12 @@ function Sidebar(props: Props) {
       role="presentation"
       onClick={props.toggleDrawer(false)}
       onKeyDown={props.toggleDrawer(false)}
-      >
-        <Avatar src={props.logged_in.image} sx={{width: '80px', height: '80px', margin: '20px auto 20px auto'}} />
-          <Typography sx={{ textAlign: 'center', fontSize: '25px', marginBottom: '10px' }} >
-              {props.logged_in.name}
-          </Typography>
-        <Divider/>
+    >{props.logged_in.bool && <>
+      <Avatar src={props.logged_in.image} sx={{ width: '80px', height: '80px', margin: '20px auto 20px auto' }} />
+      <Typography sx={{ textAlign: 'center', fontSize: '25px', marginBottom: '10px' }} >
+        {props.logged_in.name}
+      </Typography>
+      <Divider /></>}
       {props.logged_in.bool ? <>
         <List>
           {['プロフィール', 'ユーザー一覧', '問題一覧', '問題投稿'].map((text, _) => (
@@ -68,8 +68,7 @@ function Sidebar(props: Props) {
             </ListItem>
           ))}
         </List>
-        <Divider />
-        <List sx={{ position: 'absolute',width: '100%', bottom: '30px', borderTop: '1px solid rgb(200,200,200)' }}>
+        <List sx={{ position: 'absolute',width: '100%', bottom: '10px', borderTop: '1px solid rgb(200,200,200)' }}>
           <ListItem button key={'ログアウト'} onClick={props.handledelete}>
             <ListItemText primary='ログアウト' sx={{ marginLeft: '20px', color: 'red' }} />
           </ListItem>

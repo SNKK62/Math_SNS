@@ -8,6 +8,7 @@ import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
 import { LoadingButton } from '@mui/lab';
+import Userproblems from './Userproblems'
 
 
 
@@ -148,6 +149,7 @@ function Userprofile(props: Props) {
                         </Followbutton>
                     }
                     </Userwrapper>
+                    <Userproblems/>
                     </Wrapper>
                     
                 }

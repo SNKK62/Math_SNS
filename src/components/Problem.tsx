@@ -1,7 +1,7 @@
 
 import styled from 'styled-components';
 import dataFetch from './DataFetch';
-import { useReducer,useEffect } from 'react';
+import { useReducer,useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from './axios';
 import { url } from './url';
@@ -14,6 +14,9 @@ import 'slick-carousel/slick/slick.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Button from '@mui/material/Button';
+import Comments from './Comments'
+// import { CircularProgress } from '@material-ui/core';
 
 const Userwrapper = styled.div`
 display: grid;
@@ -22,6 +25,7 @@ grid-template-rows: 120px, 60px;
 width: 90%;
 height: 180px;
 margin: 0 5% 0 5%;
+border-bottom: 1px solid rgb(200,200,200);
 `
 const Imagewrapper = styled.div`
 grid-column-start: 1;
@@ -59,18 +63,7 @@ justify-content: center;
 align-items: center;
 color: blue;
 `
-const Towrapper = styled.div`
-grid-column-start: 1;
-grid-column-end: 2;
-grid-row-start: 2;
-grid-row-end: 3;
-display: flex;
-justify-content: center;
-align-items: center;
-color: blue;
-text-decoration: underline;
-cursor: pointer;
-`
+
 const Problemimage = styled.div`
     margin: auto;
     width: 80%;
@@ -91,7 +84,7 @@ const Description = styled.div`
     margin: auto;
     text-align: left;
     font-size: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     padding: 15px 10px 0 35px;
 `
 const Slide = styled(Slider)`
@@ -110,8 +103,15 @@ const Slidewrapper = styled.div`
     .slick-next:before {
         color: black;
     }
-    border-bottom: 1px solid black;
-    padding: 50px 20px 50px 20px;
+    border-bottom: 1px solid rgb(200,200,200);
+    padding: 30px 20px 30px 20px;
+`
+const Buttonarea = styled.div`
+    width: 80%;
+    height: 40px;
+    text-align: right;
+    margin: auto;
+    padding: 0 20px 0 20px;
 `
 const initialState = {
     isLoading: true,
@@ -144,7 +144,12 @@ function Problem(props: Propsstate) {
     const problem_url = props.ifproblem ? url + '/problems/' + id : url + '/solutions/' + id
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
     const navigate = useNavigate()
+    
+
     useEffect(() => {
+        if (!dataState.ifLoading) {
+            dispatch({type: 'init', payload: ''})
+        }
         axios.get(problem_url).then(resp => {
             dispatch({ type: 'success', payload: resp.data })
             console.log(dataState.post)
@@ -176,7 +181,7 @@ function Problem(props: Propsstate) {
                         <Image src={dataState.post.user_image}/>
                 </Imagewrapper>
                     <Username>{dataState.post.user_name}</Username>
-                        {props.ifproblem ? <Tagwrapper>#{dataState.post.problem.category}</Tagwrapper> : <Towrapper onClick={toproblem}>問題を見る</Towrapper>}
+                        {props.ifproblem ? <Tagwrapper>#{dataState.post.problem.category}</Tagwrapper> : <Button sx={{width: '30%',margin: 'auto'}} variant='text' onClick={toproblem}>問題を見る</Button>}
                 {dataState.post.problem.user_id == props.logged_in.id && <Buttonwrapper>
                     <IconButton onClick={toedit}>
                         <EditIcon/>        
@@ -187,37 +192,48 @@ function Problem(props: Propsstate) {
                 </Buttonwrapper>}
             </Userwrapper>
             <Description>{dataState.post.problem.description}</Description>
-            <Slidewrapper>
-                        {props.ifproblem ?
-                            <Slide {...settings}>
+                <Slidewrapper>
+                    {!(!dataState.post.problem.image1_url && !dataState.post.problem.image2_url && !dataState.post.problem.image3_url && !dataState.post.problem.image1s_url && !dataState.post.problem.image2s_url && !dataState.post.problem.image3s_url) &&
+                        <>{
+                            props.ifproblem ?
+                                <Slide {...settings}>
                                 {dataState.post.problem.image1_url &&
-                                    <Problemimage >
-                                        <Images src={dataState.post.problem.image1_url} />
-                                    </Problemimage>}
-                                {dataState.post.problem.image2_url &&
-                                    <Problemimage>
-                                        <Images src={dataState.post.problem.image2_url} />
-                                    </Problemimage>}
-                                {dataState.post.problem.image3_url &&
-                                    <Problemimage>
-                                        <Images src={dataState.post.problem.image3_url} />
-                                    </Problemimage>}
-                            </Slide> :
-                            <Slide {...settings}>
-                                {dataState.post.problem.image1s_url &&
-                                    <Problemimage >
-                                        <Images src={dataState.post.problem.image1s_url} />
-                                    </Problemimage>}
-                                {dataState.post.problem.image2s_url &&
-                                    <Problemimage>
-                                        <Images src={dataState.post.problem.image2s_url} />
-                                    </Problemimage>}
-                                {dataState.post.problem.image3s_url &&
-                                    <Problemimage>
-                                        <Images src={dataState.post.problem.image3s_url} />
-                                    </Problemimage>}
-                            </Slide>}
-            </Slidewrapper>
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image1_url} />
+                                        </Problemimage>}
+                                    
+                                    {dataState.post.problem.image2_url &&
+                                        <Problemimage>
+                                            <Images src={dataState.post.problem.image2_url} />
+                                        </Problemimage>}
+                                    {dataState.post.problem.image3_url &&
+                                        <Problemimage>
+                                            <Images src={dataState.post.problem.image3_url} />
+                                        </Problemimage>}
+                                </Slide> :
+                                <Slide {...settings}>
+                                    {dataState.post.problem.image1s_url &&
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image1s_url} />
+                                        </Problemimage>}
+                                    {dataState.post.problem.image2s_url &&
+                                        <Problemimage>
+                                            <Images src={dataState.post.problem.image2s_url} />
+                                        </Problemimage>}
+                                    {dataState.post.problem.image3s_url &&
+                                        <Problemimage>
+                                            <Images src={dataState.post.problem.image3s_url} />
+                                        </Problemimage>}
+                                </Slide>}</>
+                    }
+                </Slidewrapper>
+                <Buttonarea>
+                    {props.ifproblem &&
+                        <Button variant='text' onClick={() => { navigate('/problems/' + id + '/solutions/new') }}>解答する</Button>
+                    }
+                    <Button variant='text' onClick={() => {props.ifproblem ? navigate('/problems/'+id+'/comments/new') : navigate('/solutions/'+id+'/comments/new')}}>コメントする</Button>
+                </Buttonarea>
+                <Comments ifproblem={props.ifproblem}/>
             </Wrapper>
             }
     </>)

@@ -12,7 +12,7 @@ const Textarea = styled.textarea`
     justify-content: center;
     border-radius: 10px;
     width: 80%;
-    height: 150px;
+    height: 100px;
     left: 10%;
     font-size: 20px;
     margin: 40px auto 20px auto;
@@ -25,7 +25,7 @@ const Message = styled.div`
 
 const Submitbutton = styled(LoadingButton)`
     width: 100px;
-    margin: 60px auto 0 auto;
+    margin: 40px auto 0 auto;
 `
 interface Props {
     logged_in: {
@@ -79,7 +79,7 @@ function Makecomment(props: Props) {
         <Wrapper>
             <Message>コメントの作成</Message>
             <Textarea ref={textref} />
-            <Submitbutton sx={{ marginTop: '50px' }} loading={load} onClick={handle} >投稿</Submitbutton>
+            <Submitbutton sx={{ marginTop: '50px' }} loading={load} onClick={handle} variant='outlined'>投稿</Submitbutton>
         </Wrapper>
     )
 }
