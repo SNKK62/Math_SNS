@@ -3,36 +3,27 @@ import { useEffect ,useReducer, useState} from 'react';
 import axios from './axios';
 import dataFetch from './DataFetch';
 import { url } from './url';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import Wrapper from './Wrapper';
 import { LoadingButton } from '@mui/lab';
 import Userproblems from './Userproblems'
-
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@mui/material/IconButton';
 
 
 const Userwrapper = styled.div`
     display: grid;
-    grid-template-columns: 120px, 1fr;
-    grid-template-rows: 120px, 60px;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: 120pxs 60px;
     width: 90%;
     height: 180px;
-    margin: 0 5% 0 5%;
-    border-bottom: 1px solid rgb(200,200,200);
-`
-const Imagewrapper = styled.div`
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0;
 `
 const Image = styled.img`
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     object-fill: cover;
     border-radius: 50%;
 `
@@ -44,16 +35,31 @@ const Username = styled.div`
     padding-left: 10px;
     display: flex;
     align-items: center;
-    font-size: 35px;
+    margin: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    
+    font-size: 25px;
+`
+const Imagewrapper = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 const Countwrapper = styled.div`
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 3;
+    margin-top: 5px;
 `
 const Count = styled.div`
-    margin: center
+    margin: center;
+    font-size: 14px;
 `
 const Followbutton = styled.div`
     column: 2/3;
@@ -77,6 +83,7 @@ interface Props {
 }
 
 function Userprofile(props: Props) {
+    const navigate = useNavigate();
     const { id } = useParams()
     const [load, setLoad] = useState(false)
     const user_url = url + '/users/' + id
@@ -122,19 +129,22 @@ function Userprofile(props: Props) {
             })
         }
     }
-    
+    const toedit = () => {
+        navigate('/users/'+id+'/edit')
+    }
     return (
         <>
                 {dataState.isLoading ?
                         <Loadingwrapper><Loading/></Loadingwrapper>
-                    : 
+                    : <>
             <Wrapper>
                 <Userwrapper>
                         <Imagewrapper>
                             <Image src={dataState.post.user.image_url} />
                         </Imagewrapper>
-                    <Username>
+                    <Username id='username'>
                         {dataState.post.user.name}
+                                {dataState.post.user.id == props.logged_in.id && <IconButton onClick={toedit}><EditIcon /></IconButton>}
                     </Username>
                     <Countwrapper>
                         <Count>{dataState.post.followings}フォロー</Count>
@@ -143,14 +153,14 @@ function Userprofile(props: Props) {
                     {(props.logged_in.bool && props.logged_in.id != Number(id)) &&
                         <Followbutton>
                             {follow ? 
-                                <LoadingButton loading={load} variant='outlined' onClick={() => {handlefollow(false)}}>フォロー解除</LoadingButton> :
-                                <LoadingButton loading={load} variant='contained' onClick={() => {handlefollow(true)}} >フォロー</LoadingButton>    
+                                <LoadingButton loading={load} variant='outlined' onClick={() => {handlefollow(false)}} sx={{fontSize: '16px'}}>フォロー解除</LoadingButton> :
+                                <LoadingButton loading={load} variant='contained' onClick={() => {handlefollow(true)}} sx={{fontSize: '16px'}} >フォロー</LoadingButton>    
                         }
                         </Followbutton>
                     }
                     </Userwrapper>
-                    <Userproblems/>
                     </Wrapper>
+                    <Userproblems/></>
                     
                 }
         

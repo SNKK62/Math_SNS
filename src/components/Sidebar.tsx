@@ -47,7 +47,7 @@ function Sidebar(props: Props) {
       navigate('/login')
     }
   }
-        
+  const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const list = () => (
     <Box
           sx={{ width: '250px' }}
@@ -55,8 +55,8 @@ function Sidebar(props: Props) {
       onClick={props.toggleDrawer(false)}
       onKeyDown={props.toggleDrawer(false)}
     >{props.logged_in.bool && <>
-      <Avatar src={props.logged_in.image} sx={{ width: '80px', height: '80px', margin: '20px auto 20px auto' }} />
-      <Typography sx={{ textAlign: 'center', fontSize: '25px', marginBottom: '10px' }} >
+      <Avatar src={props.logged_in.image} onChange={() => {toPage('プロフィール')}} sx={{ width: '80px', height: '80px', margin: '20px auto 20px auto' }} />
+      <Typography id='name' sx={{ textAlign: 'center', fontSize: '22px', marginBottom: '10px' }} >
         {props.logged_in.name}
       </Typography>
       <Divider /></>}
@@ -90,8 +90,10 @@ function Sidebar(props: Props) {
           <SwipeableDrawer
             anchor={'left'}
             open={props.state}
-            onClose={props.toggleDrawer(false)}
-            onOpen={props.toggleDrawer(true)}      
+          onClose={e => { props.toggleDrawer(false)(e) }}
+          onOpen={e => { props.toggleDrawer(true)(e) }}   
+          disableBackdropTransition={!iOS}
+          disableDiscovery={iOS}
           >
             {list()}
           </SwipeableDrawer>

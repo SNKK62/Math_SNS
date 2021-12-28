@@ -12,16 +12,37 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@mui/material/Button';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
+
 
 
 const Userwrapper = styled.div`
-display: grid;
-grid-template-columns: 120px, 1fr;
-grid-template-rows: 120px, 60px;
-width: 90%;
-height: 180px;
-border-bottom: 1px solid rgb(200,200,200);
-margin: 0 5% 0 5%;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    width: 90%;
+    height: 80px;
+    margin: 0 5% 0 5%;
+`
+const Image = styled.img`
+    width: 60px;
+    height: 60px;
+    object-fill: cover;
+    border-radius: 50%;
+`
+const Username = styled.div`
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    
+    font-size: 22px;
 `
 const Imagewrapper = styled.div`
 grid-column-start: 1;
@@ -33,22 +54,7 @@ display: flex;
 align-items: center;
 margin: auto;
 `
-const Image = styled.img`
-width: 70px;
-height: 70px;
-object-fill: cover;
-border-radius: 50%;
-`
-const Username = styled.div`
-grid-column-start: 2;
-grid-column-end: 3;
-grid-row-start: 1;
-grid-row-end: 2;
-padding-left: 10px;
-display: flex;
-align-items: center;
-font-size: 35px;
-`
+
 
 // const Problemimage = styled.div`
 //     margin: auto;
@@ -70,8 +76,15 @@ const Description = styled.div`
     padding: 15px 10px 0 35px;
 `
 const Buttonwrapper = styled.div`
-    column: 2/3;
-    row: 2/3;
+    width: 30%;
+`
+const Towrapper = styled.div`
+    width: 70%;
+`
+const Bigwrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
 `
 
 const initialState = {
@@ -128,12 +141,14 @@ function Comment(props: Props) {
                 <Imagewrapper>
                         <Image src={dataState.post.user_image}/>
                 </Imagewrapper>
-                    <Username>{dataState.post.user_name}</Username>
-                        {dataState.post.comment.problem_id ? 
-                       <Button variant='text' sx={{width: '30%'}} onClick={toproblem}>問題に戻る</Button>:
-                       <Button variant='text' sx={{width: '30%'}} onClick={toproblem}>解答に戻る</Button>
-                    }
-                    {props.logged_in.id != dataState.post.comment.user_id && <Buttonwrapper>
+                    <Username>
+                        {dataState.post.user_name}</Username>
+            </Userwrapper>
+                        <Bigwrapper><Towrapper>
+                        <Button variant='text' sx={{ width: '100%' }} onClick={toproblem}>{dataState.post.comment.problem_id ? '問題' : '解答'}に戻る</Button>
+                    </Towrapper>
+                    
+                    {props.logged_in.id == dataState.post.comment.user_id && <Buttonwrapper>
                         <IconButton onClick={toedit}>
                             <EditIcon/>
                         </IconButton>
@@ -141,8 +156,8 @@ function Comment(props: Props) {
                             <DeleteForeverIcon />
                         </IconButton>
                     </Buttonwrapper>}
-            </Userwrapper>
-            <Description>{dataState.post.comment.text}</Description>
+                </Bigwrapper>
+            <Description><Latex>{dataState.post.comment.text}</Latex></Description>
         </Wrapper>
             }
     </>)

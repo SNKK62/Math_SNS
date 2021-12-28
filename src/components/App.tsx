@@ -22,6 +22,7 @@ import Searchprocess from './Searchprocess';
 import Problems from './Problems'
 import Comments from './Comments';
 import SearchTabtest from './SearchTabtest';
+import Solutions from './Solutions'
 
 const App: React.VFC = () => {
   const [value, setValue] = useState(0);
@@ -61,6 +62,7 @@ const App: React.VFC = () => {
           <Route path="/users/:id/edit" element={<Edituser logged_in={logged_in} />} />
           <Route path="/problems/new" element={<Makeproblem logged_in={logged_in} />} />
           <Route path="/problems/:id/solutions/new" element={<Makesolution logged_in={logged_in} />} />
+          <Route path="/problems/:id/solutions/" element={<Solutions />} />
           <Route path="/problems/:id" element={<Problem ifproblem={true} logged_in={logged_in} />} />
           <Route path="/solutions/:id" element={<Problem ifproblem={false} logged_in={logged_in} />} />
           <Route path="/problems/:id/edit" element={<Editproblem type='問題' ifproblem={true} logged_in={logged_in} />} />

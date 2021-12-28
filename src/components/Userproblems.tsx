@@ -10,7 +10,14 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
+const Loadingwrapper = styled.div`
+    padding-top: 15px;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+`
 
 
 
@@ -63,7 +70,9 @@ function Userproblems() {
         <>
         
             {load ? 
-            <CircularProgress/>
+                <Loadingwrapper>
+                    <CircularProgress/>
+                </Loadingwrapper>
             :
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >

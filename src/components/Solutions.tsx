@@ -1,27 +1,19 @@
-import { useState, useEffect } from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import AddIcon from '@material-ui/icons/Add';
-import CircularProgress from '@mui/material/CircularProgress';
-import Fab from '@mui/material/Fab';
+import  { useState, useEffect} from 'react';
 import axios from './axios';
 import { url } from './url';
+import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar'
 import ListItemButton from '@mui/material/ListItemButton';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import {useParams} from 'react-router-dom'
+import Avatar from '@mui/material/Avatar';
 
 
-
-const Textwrapper = styled.div`
-    width: 100%;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    padding: 5px 0 5px 10px;
-    font-size: 14px;
-`
 const Loadingwrapper = styled.div`
     padding-top: 15px;
     margin: auto;
@@ -29,30 +21,25 @@ const Loadingwrapper = styled.div`
     text-align: center;
 `
 
-interface Props {
-    ifproblem: boolean
-}
 
-function Comments(props: Props) {
-    const {id} = useParams()
+
+
+
+
+function Solutions() {
+    const { id } = useParams();
     const [times, setTimes] = useState(0);
-    const search_url = props.ifproblem ? url + '/problems/' + id + '/comments/' : url + '/solutions/' + id + '/comments/';
-    const [comments,setComments] = useState<any[]>([])
+    const [problems,setProblems] = useState<any[]>([])
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
     var real_url = ''
-
     
-
     useEffect(() => {
-        if (!load) {
-            setLoad(true)
-        }
         setTimes(0)
-        real_url = search_url + 0 + '/' ;
+        real_url = url+'/problems/'+id+'/solutions/' + '0';
         axios.get(real_url).then(resp => {
-            setComments([...resp.data.comment]);
+            setProblems([...resp.data.solution]);
             setLoad(false)
             if (resp.data.ifend) {
                 setDisable(true)
@@ -61,15 +48,16 @@ function Comments(props: Props) {
             console.log(e)
             setTimes(0)
         })
-    }, [props.ifproblem]);
+    }, []);
+    
     
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times + 1) + '/';
+        real_url = url+'/problems/'+id+'/solutions/'+String(times + 1);
         setTimes(times + 1)
         axios.get(real_url).then(resp => {
-            setComments([...comments,...resp.data.comment]);
+            setProblems([...problems,...resp.data.solution]);
             setCircular(false)
             if (resp.data.ifend) {
                 setDisable(true)
@@ -78,31 +66,26 @@ function Comments(props: Props) {
                 console.log(e)
             })
     }
+    
+
     return (
         <>
+        
             {load ? 
                 <Loadingwrapper>
                     <CircularProgress/>
                 </Loadingwrapper>
             :
-            <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
+                
+                    <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
-                        {comments.map((val: any) => {
+                        {problems.map((val: any) => {
                             return (<>
                                 <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
-                                    <ListItem  key={val.id.to_String+'item'} sx={{ padding: '0' }}>
-                                        <Avatar key={val.id.to_String+'avatar'} alt={val.user_name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
-                                        <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
-                                            <ListItemText  key={val.id.to_String+'item1'} primary={val.user_name} primaryTypographyProps={{ fontSize: '18px', paddingLeft: '25px',paddingTop: '5px' }} />
-                                            <Divider key={val.id.to_String + 'divider1'} />
-                                            <Textwrapper>
-                                                {val.text}
-                                            </Textwrapper>
-                                        </List>
+                                    <ListItem  key={val.id.to_String+'item'} sx={{ height: '50px', padding: '0' }}>
+                                    <Avatar key={val.id.to_String+'avatar'} alt={val.name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
+                                        <ListItemText key={val.id.to_String+'item2'} primary={val.user_name } primaryTypographyProps={{ fontSize: '17px', paddingLeft: '30px', color: 'rgb(100,100,100)' }} />
                                     </ListItem>
-                                    <Divider />
-                                    
-                                    
                                 </ListItemButton>
                                 <Divider key={val.id.to_String+'divider2'}/>
                             </>
@@ -118,9 +101,9 @@ function Comments(props: Props) {
                         </ListItem>
                         <Divider key='divider3'/>
                     </List>
-                }  
+                }
         </>
     )
 }
 
-export default Comments
+export default Solutions

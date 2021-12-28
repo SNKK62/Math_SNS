@@ -51,23 +51,22 @@ interface TabPanelProps {
     );
   }
 
+  function a11yProps(index: number) {
+      return {
+        id: `full-width-tab-${index}`,
+        'aria-controls': `full-width-tabpanel-${index}`,
+      };
+    }
 
 function SearchTab(props: Props) {
     const theme = useTheme();
-    const handleChange = (e?: React.SyntheticEvent, newValue?: number) => {
-        if (e && newValue) {
-            props.setValue(newValue);
-        };
+    const handleChange = (e: React.SyntheticEvent, newValue: number) => {
+      if(e){}
+      props.setValue(newValue);
     };
     const handleChangeIndex = (index: number) => {
         props.setValue(index);
     };
-    function a11yProps(index: number) {
-        return {
-          id: `full-width-tab-${index}`,
-          'aria-controls': `full-width-tabpanel-${index}`,
-        };
-      }
    
 
     return (<>
@@ -97,7 +96,7 @@ function SearchTab(props: Props) {
             </TabPanel>
             <TabPanel key='two-user' value={props.value} index={1} dir={theme.direction} >
                 <Searchproblem/>
-                    </TabPanel>
+            </TabPanel>
                     </SwipeableViews>
         </Box1>
         </Wrapper>

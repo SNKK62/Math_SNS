@@ -10,6 +10,7 @@ import {green, blue, red} from '@mui/material/colors';
 import { url } from './url';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import InputBase from '@mui/material/InputBase';
 
 
 interface Props  {
@@ -29,7 +30,7 @@ const Fileinput = styled.input`
 const Filediv = styled.div`
     width: 100%;
     text-align: center;
-    margin: 10px auto 40px auto;
+    margin: 40px auto 40px auto;
 `
 const Filewrapper = styled.label`
     width: 150px;
@@ -47,10 +48,14 @@ const Textarea = styled.textarea`
     justify-content: center;
     border-radius: 10px;
     width: 80%;
-    height: 150px;
+    height: 130px;
     left: 10%;
     font-size: 20px;
     margin: 40px auto 20px auto;
+    padding: 5px;
+    &:focus{
+        background-color: rgb(253,251,215);
+    }
 `
 const Message = styled.div`
     width: 100%;
@@ -60,10 +65,16 @@ const Message = styled.div`
 const Submitbutton = styled(LoadingButton)`
     width: 100px;
     margin: 60px auto 0 auto;
-`
-const Categoryinput = styled.input`
-    width: 100px;
-    margin: 15px 0 15px 150px;
+    `
+const Categoryinput = styled(InputBase)`
+    width: 200px;
+    margin: 0px 5px 0px 110px;
+    border: 1px solid rgb(100,100,100);
+    border-radius: 5px;
+    padding-left: 10px;
+    ${({ error }) => error && `
+        border-color: red;
+    `}
 `
 const Categorywrapper = styled.div`
     width: 100%;
@@ -72,11 +83,18 @@ const Categorywrapper = styled.div`
 `
 const Keyword = styled.div`
     position: absolute;
-    left: 50px;
+    left: 20px;
 `
 const Buttonwrapper = styled.div`
     margin-top: 80px;
     margin-bottom: 30px;
+`
+const Errortext = styled.div`
+    text-align: left;
+    color: red;
+    margin-left: 110px;
+    font-size: 14px;
+
 `
 function Make(props: Props) {
     const textref = useRef(null);
@@ -85,6 +103,7 @@ function Make(props: Props) {
     const [image3, setImage3] = useState('');
     const keywordref = useRef(null);
     const [load, setLoad] = useState(false);
+    const [error, setError] = useState('');
     const [circleloading, setCircleloading] = useState([false,false,false]);
     const [success, setSuccess] = useState([false, false, false]);
     const [inputid, setInputid] = useState('1');
@@ -112,6 +131,19 @@ function Make(props: Props) {
     };
     const handle = () => {
         setLoad(true);
+        setError('');
+        if (props.ifproblem) {
+            const keyword: any = keywordref.current;
+            if (!keyword || !keyword.childNodes[0].value) {
+                setError('empty')
+                setLoad(false);
+                return 
+            } else if (keyword.childNodes[0].value.length > 12) {
+                setError('long')
+                setLoad(false)
+                return
+            }
+        }
         const data = new FormData()
         const text: any = textref.current;
         var create_url = '';
@@ -119,7 +151,7 @@ function Make(props: Props) {
         if (props.ifproblem) {
             const keyword: any = keywordref.current;
             data.append('problem[description]', text.value);
-            data.append('problem[category]', keyword.value);
+            data.append('problem[category]', keyword.childNodes[0].value);
             data.append('problem[image1]', image1);
             data.append('problem[image2]', image2);
             data.append('problem[image3]', image3);
@@ -196,11 +228,12 @@ function Make(props: Props) {
                     {props.type}の作成
                 </Message>
                 <Textarea ref={textref} />
-                {props.ifproblem && (
+                {props.ifproblem && (<>
                     <Categorywrapper>
                         <Keyword>キーワード:</Keyword>
-                        <Categoryinput ref={keywordref} type='text'/>
+                        <Categoryinput ref={keywordref} error={error ? true: false} type='text' placeholder='12文字以下'/>
                     </Categorywrapper>
+                    {error && <Errortext>{error==='empty' ? 'キーワードを入力してください' : 'キーワードは12文字以下です'}</Errortext>}</>
                 )}
                 <Filediv>
                     <Button variant='outlined' sx={{  paddingLeft: 0, paddingRight: 0, paddingTop: 0, paddingBottom: 0, width: '150px', height: '40px', }}>

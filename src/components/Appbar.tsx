@@ -85,15 +85,17 @@ function Appbar(props: Props) {
             setSearch('')
         }
     },[])
-
+    const toProfile = () => {
+        navigate('/users/'+props.logged_in.id)
+    }
     return (<>
         <AppBar position="sticky"  sx={{height: '64px', bgcolor: 'white',zIndex: '10', boxShadow: '0 1px 5px rgb(200,200,200)' ,color: 'rgb(100,100,100)'}}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
+            <Container maxWidth="xl" sx={{height: '64px'}}>
+                <Toolbar disableGutters sx={{height: '64px'}}>
                     {(ifsearch || ifsearchprocess) ?
                         <>
                             <IconButton
-                                    size="large"
+                                    size="medium"
                                     aria-label="account of current user"
                                     aria-controls="menu-appbar"
                                     aria-haspopup="true"
@@ -124,7 +126,7 @@ function Appbar(props: Props) {
                             </Tooltip>
                         </Box >
 
-                        <Box sx={{ position: 'absolute', left: '26vw', width: '40vw', textAlign: 'center' }}>
+                        <Box sx={{ position: 'absolute', left: '24vw', width: '40vw', textAlign: 'center' }}>
                             <Typography>
                                 Math-Sns
                             </Typography>
@@ -137,7 +139,7 @@ function Appbar(props: Props) {
                             </IconButton>
                                 {props.logged_in.bool &&
                                     <IconButton sx={{ p: 0 }}>
-                                        <Avatar alt="ユーザー" src={props.logged_in.image} />
+                                        <Avatar onClick={toProfile} alt="ユーザー" src={props.logged_in.image} />
                                     </IconButton>}
                         </Box>
                     </>}

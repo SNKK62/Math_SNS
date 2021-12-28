@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import axios from './axios'
-import React, { useState, useRef} from 'react'
+import React, { useState, useRef,useEffect} from 'react'
 import {url} from './url'
 import { TextField } from '@material-ui/core'
 import { LoadingButton } from '@mui/lab';
@@ -47,10 +47,10 @@ const Message = styled.div`
 const Button = styled(LoadingButton)`
     width: 150px;
     text-align: center;
-    margin: 30px auto;
+    margin: 20px auto;
 `
 const Defaultdiv = styled.div`
-    width: 250px;
+    width: 200px;
     margin: 30px auto 20px auto;;
     display: flex;
     justify-content: center;
@@ -58,11 +58,15 @@ const Defaultdiv = styled.div`
     border: 1px solid black;
     border-radius: 10px;
     padding: 5px 0 5px 0;
+    cursor: pointer;
 `
 const Errortext = styled.div`
     width: 80%;
-    margin: 0 auto 40px 0 auto;
+    margin: 0 auto 35px auto;
+    text-align: left;
+    padding-left: 10px;
     color: red;
+    font-size: 13px;
 `
 
 
@@ -87,7 +91,7 @@ const Signup: React.FC<Props> = (props) => {
     const Passconfref = useRef(null);
     const Imageref = useRef(null);
     const navigate = useNavigate();
-    const [nameerror, setNameerror] = useState(false);
+    const [nameerror, setNameerror] = useState('');
     const [passerror, setPasserror] = useState(false);
     const [passconferror, setPassconferror] = useState(false);
     
@@ -95,12 +99,17 @@ const Signup: React.FC<Props> = (props) => {
     const [imgurl, setImgurl] = useState(newuserimage);
     const [load, setLoad] = useState(false);
     const [ifdefault, setIfdefault] = useState('default');
+    useEffect(() => {
+        if (props.logged_in.bool) {
+            navigate('/users/'+props.logged_in.id, { replace: true})
+        }
+    })
     const handle = () => {
         setLoad(true);
         var error1 = false;
         var error2 = false;
         var error3 = false;
-        setNameerror(false);
+        setNameerror('');
         setPasserror(false);
         setPassconferror(false);
         const name: any = Nameref.current;
@@ -109,7 +118,9 @@ const Signup: React.FC<Props> = (props) => {
         const image: any = Imageref.current;
         if (!name || !name.childNodes[1].childNodes[0].value) {
             error1 = true;
-            setNameerror(true)
+            setNameerror('empty')
+        } else if (name.childNodes[1].childNodes[0].value.length >11) {
+            setNameerror('long')
         }
         if (!pass || pass.childNodes[1].childNodes[0].value.length<6) {
             error2 = true;
@@ -144,7 +155,7 @@ const Signup: React.FC<Props> = (props) => {
                 console.log(e)
             })
         }).catch(e => {
-            
+            setNameerror('exist')
             console.log(e.response.data.error);
             setLoad(false);
         })
@@ -169,17 +180,20 @@ const Signup: React.FC<Props> = (props) => {
                 </Filewrapper>
                 <Fileinput  id='fileinput' ref={Imageref} type='file' accept="image/*" onChange={(e)=>{imghandle(e)}}/>
             </Filewrapper2>
-            <Defaultdiv onClick={defaulthandle} >デフォルトの画像を使用する</Defaultdiv>
-            <Inputwrapper><Input ref={Nameref} error={nameerror} label="Name" variant="outlined" /></Inputwrapper>
-            {nameerror && <Errortext>その名前は使用されています</Errortext>}
-            <Inputwrapper><Input  ref={Passref} error={passerror} label="Password" variant="outlined" type='password'/></Inputwrapper>
+            <Defaultdiv onClick={defaulthandle} >デフォルト画像</Defaultdiv>
+            <Inputwrapper><Input ref={Nameref} error={nameerror ? true : false} label="ユーザー名" variant="outlined" placeholder='11文字以下' /></Inputwrapper>
+            {nameerror && <>
+                {nameerror === 'empty' && 'ユーザー名を入力してください'}
+                {nameerror === 'exist' && 'そのユーザー名は使えません'}
+                {nameerror === 'long' && '名前は11文字以下です'}</>}
+            <Inputwrapper><Input  ref={Passref} error={passerror} label="パスワード" variant="outlined" type='password' placeholder='６文字以上'/></Inputwrapper>
             {passerror && <Errortext>パスワードは６文字以上です</Errortext>}
-            <Inputwrapper><Input ref={Passconfref} error={passconferror} label="Password Confirmation" variant="outlined" type='password' /></Inputwrapper>
-            {passconferror && <Errortext>パスワード一致していません</Errortext>}
+            <Inputwrapper><Input ref={Passconfref} error={passconferror} label="パスワード確認" variant="outlined" type='password' /></Inputwrapper>
+            {passconferror && <Errortext>パスワードと不一致です</Errortext>}
             
             
             <Button loading={load} onClick={handle} variant="outlined" >
-                Create
+                登録
             </Button>
         </Wrapper>
     )

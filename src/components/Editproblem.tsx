@@ -12,6 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
+import InputBase from '@mui/material/InputBase';
 
 
 interface Props  {
@@ -60,9 +61,15 @@ const Submitbutton = styled(LoadingButton)`
     width: 100px;
     margin: 60px auto 0 auto;
 `
-const Categoryinput = styled.input`
-    width: 100px;
-    margin: 15px 0 15px 150px;
+const Categoryinput = styled(InputBase)`
+    width: 200px;
+    margin: 0px 5px 0px 110px;
+    border: 1px solid rgb(100,100,100);
+    border-radius: 5px;
+    padding-left: 10px;
+    ${({ error }) => error && `
+        border-color: red;
+    `}
 `
 const Categorywrapper = styled.div`
     width: 100%;
@@ -71,7 +78,14 @@ const Categorywrapper = styled.div`
 `
 const Keyword = styled.div`
     position: absolute;
-    left: 50px;
+    left: 20px;
+`
+const Errortext = styled.div`
+    text-align: left;
+    color: red;
+    margin-left: 110px;
+    font-size: 14px;
+
 `
 const initialState = {
     isLoading: true,
@@ -83,7 +97,7 @@ function Editproblem(props: Props) {
     const { id } = useParams()
     const get_url = props.ifproblem ? url + '/problems/' + id : url + '/solutions/' + id; 
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
-    
+    const [error, setError] = useState('');
     const [textarea, setTextarea] = useState('');
     const [keyword, setKeyword] = useState('');
     const [image1, setImage1] = useState('');
@@ -162,6 +176,17 @@ function Editproblem(props: Props) {
     };
     const handle = () => {
         setLoad(true);
+        if (props.ifproblem) {
+            if (!keyword) {
+                setError('empty')
+                setLoad(false);
+                return 
+            } else if (keyword.length > 12) {
+                setError('long')
+                setLoad(false)
+                return
+            }
+        }
         const data = new FormData()
         var edit_url = '';
         var new_url:string = '';
@@ -230,12 +255,13 @@ function Editproblem(props: Props) {
                             {props.type}の編集
                         </Message>
                         <Textarea id='textarea' onChange={e => { handlechangetext(e) }} defaultValue={dataState.post.problem.description} />
-                        {props.ifproblem && (
-                            <Categorywrapper>
-                                <Keyword>キーワード:</Keyword>
-                                <Categoryinput id='keyword' onChange={e => {handlechangekeyword(e)}} type='text' defaultValue={dataState.post.problem.category} />
-                            </Categorywrapper>
-                        )}
+                        {props.ifproblem && (<>
+                    <Categorywrapper>
+                        <Keyword>キーワード:</Keyword>
+                        <Categoryinput onChange={e => {handlechangekeyword(e)}} error={error ? true: false} type='text' placeholder='12文字以下' defaultValue={dataState.post.problem.category} />
+                    </Categorywrapper>
+                    {error && <Errortext>{error==='empty' ? 'キーワードを入力してください' : 'キーワードは12文字以下です'}</Errortext>}</>
+                )}
                         
                         <File3wrapper>
                             {(!circleloading[0] && success[0]) && (

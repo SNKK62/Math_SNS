@@ -21,7 +21,7 @@ const Textinput = styled(TextField)`
 `
 const Textwrapper = styled.div`
     width: 80%;
-    margin: 40px auto 40px auto;
+    margin: 40px auto 0 auto;
 `
 
 const Button = styled(LoadingButton)`
@@ -69,6 +69,14 @@ const Defaultdiv = styled.div`
     padding: 5px 0 5px 0;
     cursor: pointer;
 `
+const Errortext = styled.div`
+    width: 80%;
+    margin: 0 auto 40px auto;
+    text-align: left;
+    color: red;
+    padding-left: 10px;
+    font-size: 13px;
+`
 const initialState = {
     isLoading: true,
     isError: '',
@@ -91,11 +99,12 @@ function Edituser(props: Props) {
     const [name, setName] = useState('');
     const Imageref = useRef(null);
     const [imgurl, setImgurl] = useState('');
+    const [error, setError] = useState('')
     const navigate = useNavigate();
     
     useEffect(() => {
         if (!props.logged_in.bool || props.logged_in.id != Number(id)) {
-            navigate('/usres/' + props.logged_in.id + '/edit',{replace: true})
+            navigate('/users/' + props.logged_in.id + '/edit',{replace: true})
             return
         }
         axios.get(user_url).then(resp => {
@@ -118,10 +127,16 @@ function Edituser(props: Props) {
     }
     const handle = () => {
         setLoading(true);
+        if (!name) {
+            setError('empty')
+            setLoading(false)
+            return
+        } else if (name.length > 11) {
+            setError('long')
+        }
         const image: any = Imageref.current;
         const data = new FormData();
         data.append('user[name]', name)
-        console.log(!image.files[0])
         if (ifdefault == 'default') {
             data.append('user[image]', 'default');  
         } else if (!image.files[0]) {
@@ -134,13 +149,14 @@ function Edituser(props: Props) {
             const new_id = resp.data.user.id;
             navigate('/users/'+new_id)
         }).catch(e => {
-            console.log(e.response.error);
+            setError('exist')
+            console.log(e.response.data.error);
             setLoading(false);
         })
     }
 
     const handlename = (e: any) => {
-        setName(e.target.childNodes[1].childNodes[0].value) 
+        setName(e.target.value) 
     }
     
     return (
@@ -161,8 +177,15 @@ function Edituser(props: Props) {
                     </Filewrapper>
                     <Defaultdiv onClick={defaulthandle} >デフォルトの画像を使用する</Defaultdiv>
                     <Textwrapper>
-                        <Textinput id='name' error={false} label="Name" variant="standard" onClick={e => { handlename(e) }} defaultValue={dataState.post.user.name} />
+                        <Textinput id='name' error={error ? true : false} label="ユーザー名" variant="standard" onChange={e => { handlename(e) }} defaultValue={dataState.post.user.name} placeholder='11文字以下'/>
                     </Textwrapper>
+                    {error && 
+                        <Errortext>
+                            {error === 'empty' && 'ユーザー名を入力してください'}
+                            {error === 'exist' && 'そのユーザー名はすでに使用されています'}
+                            {error === 'long' && 'ユーザー名は11文字以下です'}
+                        </Errortext>
+                    }
                        
                     <Buttonwrapper>
                         <Button loading={loading} onClick={handle} variant="outlined" >変更</Button>
