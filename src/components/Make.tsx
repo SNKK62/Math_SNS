@@ -11,6 +11,12 @@ import { url } from './url';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
+    width: 80%;
+`
 
 
 interface Props  {
@@ -40,23 +46,12 @@ const Filewrapper = styled.label`
     cursor: pointer;
 `
 const File3wrapper = styled.div`
-    width: 80%;
+    width: 100%;
     margin: 15px auto 60px auto;
-`
-const Textarea = styled.textarea`
     display: flex;
-    justify-content: center;
-    border-radius: 10px;
-    width: 80%;
-    height: 130px;
-    left: 10%;
-    font-size: 20px;
-    margin: 40px auto 20px auto;
-    padding: 5px;
-    &:focus{
-        background-color: rgb(253,251,215);
-    }
+    justify-content: space-around;
 `
+
 const Message = styled.div`
     width: 100%;
     font-size: 25px;
@@ -68,7 +63,7 @@ const Submitbutton = styled(LoadingButton)`
     `
 const Categoryinput = styled(InputBase)`
     width: 200px;
-    margin: 0px 5px 0px 110px;
+    margin: 0px 5px 0px 30px;
     border: 1px solid rgb(100,100,100);
     border-radius: 5px;
     padding-left: 10px;
@@ -82,8 +77,7 @@ const Categorywrapper = styled.div`
     align-items: center;
 `
 const Keyword = styled.div`
-    position: absolute;
-    left: 20px;
+    margin-left: 30px;
 `
 const Buttonwrapper = styled.div`
     margin-top: 80px;
@@ -92,9 +86,14 @@ const Buttonwrapper = styled.div`
 const Errortext = styled.div`
     text-align: left;
     color: red;
-    margin-left: 110px;
+    margin-left: 150px;
     font-size: 14px;
-
+`
+const Fab1 = styled.div`
+    width: 12%;
+`
+const Warn = styled.p`
+    font-size: 13px;
 `
 function Make(props: Props) {
     const textref = useRef(null);
@@ -225,9 +224,16 @@ function Make(props: Props) {
         <>
             <Wrapper>
                 <Message>
-                    {props.type}の作成
+                    {props.type}の作成<br/><Warn>texのテキストは$(半角)で囲んでください</Warn>
                 </Message>
-                <Textarea ref={textref} />
+            <Textareawrapper>
+                <TextareaAutosize
+                    aria-label="minimum height"
+                    minRows={5}
+                    style={{ width: '80%' }}
+                ref={textref}
+                    />
+            </Textareawrapper>
                 {props.ifproblem && (<>
                     <Categorywrapper>
                         <Keyword>キーワード:</Keyword>
@@ -243,12 +249,12 @@ function Make(props: Props) {
                     </Button>
                 </Filediv>
                 <File3wrapper>
+                    <Fab1>
                     {(!circleloading[0] && success[0]) && (
                     
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: green[500],
-                            position: 'absolute',
-                            left: '16%',
+                           
                         
                             '&:hover': { bgcolor: red[700] }
                         }} onClick={() => {handledelete(1)}} >
@@ -257,8 +263,7 @@ function Make(props: Props) {
                     {(!circleloading[0] && !success[0]) && (
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: blue[500],
-                            position: 'absolute',
-                            left: '16%',
+                            
                             '&:hover': { bgcolor: blue[500] }
                         }}>
                              1
@@ -269,16 +274,15 @@ function Make(props: Props) {
                                 size={68}
                                 sx={{
                                     color: green[500],
-                                    position: 'absolute',
-                                    left: '15%',
+                                   
                             }}
                             />
-                    )}
+                        )}</Fab1>
+                    <Fab1>
                     {(!circleloading[1] && success[1]) && (
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: green[500],
-                            position: 'absolute',
-                            left: '44%',
+                            
                             '&:hover': { bgcolor: red[700] }
                         }} onClick={() => {handledelete(2)}} >
                             <CheckIcon /> 
@@ -286,8 +290,7 @@ function Make(props: Props) {
                     {(!circleloading[1] && !success[1]) && (
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: blue[500],
-                            position: 'absolute',
-                            left: '44%',
+                            
                             '&:hover': { bgcolor: blue[500] }
                         }}>
                              2
@@ -298,16 +301,15 @@ function Make(props: Props) {
                                 size={68}
                                 sx={{
                                     color: green[500],
-                                    position: 'absolute',
-                                    left: '43%',
+                                    
                             }}
                             />
-                    )}
+                        )}</Fab1>
+                    <Fab1>
                     {(!circleloading[2] && success[2]) && (
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: green[500],
-                            position: 'absolute',
-                            left: '72%',
+                            
                             '&:hover': { bgcolor: red[700] }
                         }} onClick={() => {handledelete(3)}} >
                             <CheckIcon /> 
@@ -315,8 +317,7 @@ function Make(props: Props) {
                     {(!circleloading[2] && !success[2]) && (
                         <Fab aria-label='save' color='primary' sx={{
                             bgcolor: blue[500],
-                            position: 'absolute',
-                            left: '72%',
+                            
                             '&:hover': { bgcolor: blue[500] }
                             
                         }}>
@@ -328,11 +329,10 @@ function Make(props: Props) {
                                 size={68}
                                 sx={{
                                     color: green[500],
-                                    position: 'absolute',
-                                    left: '71%',
+                                    
                             }}
                             />
-                        )}
+                        )}</Fab1>
                 </File3wrapper>
 
                 <Fileinput  type='file' accept='images/*' id='1' onChange={(e) => { handlecircular(0); handlechange(e) }} />

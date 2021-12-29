@@ -7,7 +7,6 @@ import axios from './axios';
 import { url } from './url';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
-import Wrapper from './Wrapper';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -121,13 +120,24 @@ const Allwrapper = styled.div`
     z-index: 100;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(80,80,80,10);
+    background-color: rgb(0,0,0,0.5);
 `
 const Bigimage = styled.img`
     object-fit: contain;
     width: 100%;
     height: 100%;
 
+`
+const Wrapper = styled.div`
+    width: 100%;
+    @media(min-width: 600px){
+        width: 60vw;
+        box-sizing: border-box;
+    }
+    @media(min-width: 1025px){
+        width: 45vw;
+        box-sizing: border-box;
+    }
 `
 const initialState = {
     isLoading: true,
@@ -273,8 +283,8 @@ function Problem(props: Propsstate) {
                     </>}
                     <Button variant='text' onClick={() => {props.ifproblem ? navigate('/problems/'+id+'/comments/new') : navigate('/solutions/'+id+'/comments/new')}}>コメントする</Button>
                 </Buttonarea>
-            </Wrapper>
-                <Comments ifproblem={props.ifproblem}/></>
+                <Comments ifproblem={props.ifproblem}/>
+            </Wrapper></>
             }
     </>)
 }

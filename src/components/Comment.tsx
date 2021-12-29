@@ -71,7 +71,7 @@ const Description = styled.div`
     width: 80%;
     margin: auto;
     text-align: left;
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 40px;
     padding: 15px 10px 0 35px;
 `

@@ -6,7 +6,6 @@ import { url } from './url';
 import { useParams,useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
-import Wrapper from './Wrapper';
 import { LoadingButton } from '@mui/lab';
 import Userproblems from './Userproblems'
 import EditIcon from '@material-ui/icons/Edit';
@@ -58,14 +57,24 @@ const Countwrapper = styled.div`
     margin-top: 5px;
 `
 const Count = styled.div`
-    margin: center;
     font-size: 14px;
+    padding-left: 5px;
 `
 const Followbutton = styled.div`
     column: 2/3;
     row: 2/3;
 `
-
+const Allwrapper = styled.div`
+width: 100%;
+    @media(min-width: 600px){
+        width: 60vw;
+        box-sizing: border-box;
+    }
+    @media(min-width: 1025px){
+        width: 45vw;
+        box-sizing: border-boxl;
+    }
+`
 
 const initialState = {
     isLoading: true,
@@ -137,7 +146,7 @@ function Userprofile(props: Props) {
                 {dataState.isLoading ?
                         <Loadingwrapper><Loading/></Loadingwrapper>
                     : <>
-            <Wrapper>
+            <Allwrapper>
                 <Userwrapper>
                         <Imagewrapper>
                             <Image src={dataState.post.user.image_url} />
@@ -159,8 +168,8 @@ function Userprofile(props: Props) {
                         </Followbutton>
                     }
                     </Userwrapper>
-                    </Wrapper>
-                    <Userproblems/></>
+                    <Userproblems/>
+                    </Allwrapper></>
                     
                 }
         

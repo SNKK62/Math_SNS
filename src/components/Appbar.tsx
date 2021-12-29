@@ -17,6 +17,7 @@ import Sidebar from './Sidebar';
 import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import InputBase from '@mui/material/InputBase';
+import MediaQuery from 'react-responsive';
 
 
 const SearchInput = styled(InputBase)`
@@ -111,7 +112,8 @@ function Appbar(props: Props) {
                                 </IconButton>
                             </Box>
                         </> : <>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}  >
+                        <MediaQuery query='(max-width: 600px)'>
+                        <Box sx={{ flexGrow: 1, display: 'flex' }}  >
                             <Tooltip title="サイドバーを開く">
                                 <IconButton
                                     size="large"
@@ -125,7 +127,7 @@ function Appbar(props: Props) {
                                 </IconButton>
                             </Tooltip>
                         </Box >
-
+                        </MediaQuery>
                         <Box sx={{ position: 'absolute', left: '24vw', width: '40vw', textAlign: 'center' }}>
                             <Typography>
                                 Math-Sns
@@ -133,10 +135,12 @@ function Appbar(props: Props) {
                         </Box>
                     
 
-                        <Box sx={{ flexGrow: 0, position: { xs: 'static', md: 'absolute' }, right: '20px' }}>
-                            <IconButton sx={{ p: 0, marginRight: '5px', display: { xs: 'static',md: 'none'}}} onClick={() => { handlesearch(true) }}>
-                                <SearchIcon />
-                            </IconButton>
+                        <Box sx={{ flexGrow: 0, position: 'absolute', right: '20px' }}>
+                            <MediaQuery query='(max-width: 1025px)'>
+                                <IconButton sx={{ p: 0, marginRight: '5px', display:'static'}} onClick={() => { handlesearch(true) }}>
+                                    <SearchIcon />
+                                </IconButton>
+                            </MediaQuery>        
                                 {props.logged_in.bool &&
                                     <IconButton sx={{ p: 0 }}>
                                         <Avatar onClick={toProfile} alt="ユーザー" src={props.logged_in.image} />

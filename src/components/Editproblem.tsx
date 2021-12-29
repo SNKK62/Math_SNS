@@ -13,6 +13,12 @@ import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
 import InputBase from '@mui/material/InputBase';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
+    width: 80%;
+`
 
 
 interface Props  {
@@ -41,17 +47,10 @@ const Filewrapper = styled.label`
 const File3wrapper = styled.div`
     width: 80%;
     margin: 30px auto 50px auto;
-`
-const Textarea = styled.textarea`
     display: flex;
-    justify-content: center;
-    border-radius: 10px;
-    width: 80%;
-    height: 150px;
-    left: 10%;
-    font-size: 20px;
-    margin: 40px auto 20px auto;
+    justify-content: space-around;
 `
+
 const Message = styled.div`
     width: 100%;
     font-size: 25px;
@@ -63,7 +62,7 @@ const Submitbutton = styled(LoadingButton)`
 `
 const Categoryinput = styled(InputBase)`
     width: 200px;
-    margin: 0px 5px 0px 110px;
+    margin: 0px 5px 0px 30px;
     border: 1px solid rgb(100,100,100);
     border-radius: 5px;
     padding-left: 10px;
@@ -77,8 +76,7 @@ const Categorywrapper = styled.div`
     align-items: center;
 `
 const Keyword = styled.div`
-    position: absolute;
-    left: 20px;
+    margin-left: 30px;
 `
 const Errortext = styled.div`
     text-align: left;
@@ -86,6 +84,12 @@ const Errortext = styled.div`
     margin-left: 110px;
     font-size: 14px;
 
+`
+const Fab1 = styled.div`
+    width: 12%;
+`
+const Warn = styled.p`
+    font-size: 13px;
 `
 const initialState = {
     isLoading: true,
@@ -252,9 +256,18 @@ function Editproblem(props: Props) {
             dataState.isLoading ? <Loadingwrapper><Loading /></Loadingwrapper> : 
                 <Wrapper>
                         <Message>
-                            {props.type}の編集
+                            {props.type}の編集<br/><Warn>texのテキストは$(半角)で囲んでください</Warn>
                         </Message>
-                        <Textarea id='textarea' onChange={e => { handlechangetext(e) }} defaultValue={dataState.post.problem.description} />
+                    <Textareawrapper>
+                        <TextareaAutosize
+                            aria-label="minimum height"
+                            minRows={5}
+                            style={{ width: '80%' }}
+                            id='textarea'
+                            onChange={e => { handlechangetext(e) }}
+                            defaultValue={dataState.post.problem.description}
+                            />
+                    </Textareawrapper>
                         {props.ifproblem && (<>
                     <Categorywrapper>
                         <Keyword>キーワード:</Keyword>
@@ -263,13 +276,12 @@ function Editproblem(props: Props) {
                     {error && <Errortext>{error==='empty' ? 'キーワードを入力してください' : 'キーワードは12文字以下です'}</Errortext>}</>
                 )}
                         
-                        <File3wrapper>
+                        <File3wrapper><Fab1>
                             {(!circleloading[0] && success[0]) && (
                     
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: green[500],
-                                    position: 'absolute',
-                                    left: '16%',
+                                    
                         
                                     '&:hover': { bgcolor: red[700] }
                                 }} onClick={() => { handledelete(1) }} >
@@ -278,8 +290,7 @@ function Editproblem(props: Props) {
                             {(!circleloading[0] && !success[0]) && (
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: blue[500],
-                                    position: 'absolute',
-                                    left: '16%',
+                                  
                                     margin: '0',
                                     padding: '0',
                                     '&:hover': { bgcolor: blue[700] }
@@ -294,16 +305,15 @@ function Editproblem(props: Props) {
                                     size={68}
                                     sx={{
                                         color: green[500],
-                                        position: 'absolute',
-                                        left: '15%',
+                                        
                                     }}
                                 />
-                            )}
+                            )}</Fab1>
+                            <Fab1>
                             {(!circleloading[1] && success[1]) && (
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: green[500],
-                                    position: 'absolute',
-                                    left: '44%',
+                                   
                                     '&:hover': { bgcolor: red[700] }
                                 }} onClick={() => { handledelete(2) }} >
                                     <CheckIcon />
@@ -311,10 +321,10 @@ function Editproblem(props: Props) {
                             {(!circleloading[1] && !success[1]) && (
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: blue[500],
-                                    position: 'absolute',
+                                    
                                     margin: '0',
                                     padding: '0',
-                                    left: '44%',
+                                    
                                     '&:hover': { bgcolor: blue[700] }
                                 }}>
                                     <Filewrapper htmlFor='2'>
@@ -327,16 +337,15 @@ function Editproblem(props: Props) {
                                     size={68}
                                     sx={{
                                         color: green[500],
-                                        position: 'absolute',
-                                        left: '43%',
+                                        
                                     }}
                                 />
-                            )}
+                                )}</Fab1>
+                            <Fab1>
                             {(!circleloading[2] && success[2]) && (
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: green[500],
-                                    position: 'absolute',
-                                    left: '72%',
+                                   
                                     '&:hover': { bgcolor: red[700] }
                                 }} onClick={() => { handledelete(3) }} >
                                     <CheckIcon />
@@ -344,10 +353,10 @@ function Editproblem(props: Props) {
                             {(!circleloading[2] && !success[2]) && (
                                 <Fab aria-label='save' color='primary' sx={{
                                     bgcolor: blue[500],
-                                    position: 'absolute',
+                                    
                                     margin: '0',
                                     padding: '0',
-                                    left: '72%',
+                                   
                                     '&:hover': { bgcolor: blue[700] }
                             
                                 }}>
@@ -361,11 +370,10 @@ function Editproblem(props: Props) {
                                     size={68}
                                     sx={{
                                         color: green[500],
-                                        position: 'absolute',
-                                        left: '71%',
+                                       
                                     }}
                                 />
-                            )}
+                            )}</Fab1>
                         </File3wrapper>
 
                         <Fileinput type='file' accept='images/*' id='1' onChange={(e) => { handlecircular(0); handlechange(e,1) }} />

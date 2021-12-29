@@ -74,10 +74,11 @@ function Sidebar(props: Props) {
           </ListItem>
         </List></> :
         <List>
-          {['ログイン', 'サインアップ'].map((text, _) => (
+          {['ログイン', 'サインアップ'].map((text, _) => (<>
             <ListItem button key={text} onClick={() => { toPage(text) }}  >
               <ListItemText primary={text} sx={{ marginLeft: '20px' }} />
             </ListItem>
+            <Divider/></>
           ))}
         </List>}
         

@@ -15,7 +15,7 @@ import Loadingwrapper from './Loadingwrapper';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import Wrapper from './Wrapper'
 
 const Loading2 = styled(Loading)`
     height: 100%;
@@ -76,7 +76,7 @@ function Searchuser() {
             <Loadingwrapper>
                 <Loading2 />
             </Loadingwrapper>
-            :
+            :<Wrapper>
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
@@ -106,7 +106,7 @@ function Searchuser() {
                         }
                         </ListItem>
                         <Divider key='divider3'/>
-                    </List>
+                    </List></Wrapper>
                 }
         </>
     )

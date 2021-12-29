@@ -5,24 +5,21 @@ import Wrapper from './Wrapper';
 import { useRef,  useState, useEffect } from 'react';
 import { useNavigate, useParams, useMatch } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
-
-const Textarea = styled.textarea`
-    display: flex;
-    justify-content: center;
-    border-radius: 10px;
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
     width: 80%;
-    height: 100px;
-    left: 10%;
-    font-size: 20px;
-    margin: 40px auto 20px auto;
 `
+
 const Message = styled.div`
     width: 100%;
     font-size: 25px;
     margin: 30px auto;
 `
-
+const Warn = styled.p`
+    font-size: 13px;
+`
 const Submitbutton = styled(LoadingButton)`
     width: 100px;
     margin: 40px auto 0 auto;
@@ -77,8 +74,15 @@ function Makecomment(props: Props) {
     
     return (
         <Wrapper>
-            <Message>コメントの作成</Message>
-            <Textarea ref={textref} />
+            <Message>コメントの作成<br/><Warn>texのテキストは$(半角)で囲んでください</Warn></Message>
+            <Textareawrapper>
+            <TextareaAutosize
+                aria-label="minimum height"
+                minRows={5}
+                style={{ width: '80%' }}
+                ref={textref}
+                />
+            </Textareawrapper>
             <Submitbutton sx={{ marginTop: '50px' }} loading={load} onClick={handle} variant='outlined'>投稿</Submitbutton>
         </Wrapper>
     )

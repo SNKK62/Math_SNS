@@ -8,18 +8,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
-
-
-const Textarea = styled.textarea`
-    display: flex;
-    justify-content: center;
-    border-radius: 10px;
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
     width: 80%;
-    height: 150px;
-    left: 10%;
-    font-size: 20px;
-    margin: 40px auto 20px auto;
+`
+
+
+const Warn = styled.p`
+    font-size: 13px;
 `
 const Message = styled.div`
     width: 100%;
@@ -101,9 +99,18 @@ function Editcomment(props: Props) {
             dataState.isLoading ? <Loadingwrapper><Loading/></Loadingwrapper> : 
                     <Wrapper>
                         <Message>
-                            コメントの編集
+                            コメントの編集<br/><Warn>texのテキストは$(半角)で囲んでください</Warn>
                         </Message>
-                        <Textarea id='textarea' onChange={e => { handlechangetext(e) }} defaultValue={dataState.post.comment.text} />
+                    <Textareawrapper>
+                    <TextareaAutosize
+                        aria-label="minimum height"
+                        minRows={5}
+                        style={{ width: '80%' }}
+                        id='textarea'
+                        onChange={e => { handlechangetext(e) }} 
+                        defaultValue={dataState.post.comment.text}
+                        />
+                    </Textareawrapper>
                         
 
                         <Submitbutton loading={load} onClick={handle} variant='contained' sx={{ marginTop: '50px' }} >変更</Submitbutton>

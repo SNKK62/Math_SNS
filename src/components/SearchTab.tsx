@@ -9,6 +9,8 @@ import Wrapper from './Wrapper';
 import Searchproblem from './Searchproblem';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 const Box1 = styled(Box)`
@@ -20,7 +22,7 @@ interface Props{
     // index: number
     // setIndex: React.Dispatch<React.SetStateAction<number>>
     value: number
-    setValue: React.Dispatch<React.SetStateAction<number>>
+  setValue: React.Dispatch<React.SetStateAction<number>>
 }
 
 
@@ -59,6 +61,7 @@ interface TabPanelProps {
     }
 
 function SearchTab(props: Props) {
+    const navigate = useNavigate();
     const theme = useTheme();
     const handleChange = (e: React.SyntheticEvent, newValue: number) => {
       if(e){}
@@ -67,7 +70,11 @@ function SearchTab(props: Props) {
     const handleChangeIndex = (index: number) => {
         props.setValue(index);
     };
-   
+  useEffect(() => {
+    if (window.innerWidth >= 600) {
+       navigate('/users',{replace: true})
+     }
+   })
 
     return (<>
         <Wrapper id='wrapper'>

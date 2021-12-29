@@ -21,7 +21,9 @@ const Loading2 = styled(Loading)`
     height: 100%;
     width: 100%;
 `
-
+const Loadingwrapper2 = styled(Loadingwrapper)`
+    width: 35vw;
+`
 
 interface Props {
     keyword: String
@@ -76,9 +78,9 @@ function Searchusersub(props: Props) {
         <>
         
             {load ? 
-            <Loadingwrapper>
+            <Loadingwrapper2>
                 <Loading2 />
-            </Loadingwrapper>
+            </Loadingwrapper2>
             :
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
@@ -101,10 +103,10 @@ function Searchusersub(props: Props) {
                             )
                         })}
                         <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '0' }}>
-                        {!circular ? 
-                        <Fab disabled={disable} aria-label="add" sx={{  border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll} >
+                        {!circular ? <>
+                        {!disable && <Fab aria-label="add" sx={{  border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll} >
                             <AddIcon  />
-                            </Fab> : 
+                            </Fab> }</>: 
                             <CircularProgress sx={{margin: 'auto'}} />
                         }
                         </ListItem>

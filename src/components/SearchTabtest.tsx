@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import TabPanel from '@mui/lab/TabPanel';
 import Searchusersub from './Searchusersub';
-import Wrapper from './Wrapper';
 import TabContext from '@mui/lab/TabContext';       
 import Searchproblemsub from './Searchproblemsub';
 import { useState, useRef } from 'react';
@@ -35,18 +34,32 @@ const SearchInput = styled(InputBase)`
     align-items: center;
 `
 const Searchwrapper = styled.div`
-    width: 100%;
+    width: 35vw;
     background: white;
     z-index: 20;
     height: 50px;
     position: fixed;
     top: 64px;
+    right: 0;
+    box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
+    border-left: 1px solid rgb(200,200,200);
 
 `
-const Wrapper2 = styled(Wrapper)`
+const Wrapper2 = styled.div`
+    width: 100%;
+    text-align: center;
+    height: calc(100vh-64px);
+    overflow-y: auto;
+    overflow-scroll: touch;
     height: calc(100vh-114px);
     margin-top: 50px;
 `
+const Allwrapper = styled.div`
+    height: calc(100vh-64px);
+    width: 35vw;
+    border-left: 1px solid rgb(200,200,200);
+`
+
 
 function SearchTabtest() {
   const [value, setValue] = useState('1')
@@ -72,7 +85,7 @@ function SearchTabtest() {
   }
    
 
-    return (<>
+    return (<Allwrapper>
         <Searchwrapper>
         <SearchInput ref={search} placeholder="検索キーワード..." onKeyPress={e => { handlekeypress(e)}}/>
         <IconButton sx={{ p: 0,  position: 'absolute', top: '20px', right: '1%'}} onClick={handlesubmit}>
@@ -94,17 +107,16 @@ function SearchTabtest() {
                     <Tab key='two'  label="問題" value='2' sx={{width: '50%'}} />
             </TabList>
             </Box1>
-            
             <TabPanel key='one-user-sub' value={'1'}  >
                 <Searchusersub keyword={keyword} />
             </TabPanel>
             <TabPanel key='two-user-sub' value={'2'}  >
                 <Searchproblemsub keyword={keyword} />
-            </TabPanel>
+              </TabPanel>
           </TabContext>
         </Box1>
         </Wrapper2>
-    </>)
+    </Allwrapper>)
 }
 
 export default SearchTabtest
