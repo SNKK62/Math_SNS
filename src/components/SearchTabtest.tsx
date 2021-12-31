@@ -49,15 +49,13 @@ const Wrapper2 = styled.div`
     width: 100%;
     text-align: center;
     height: calc(100vh-64px);
-    overflow-y: auto;
-    overflow-scroll: touch;
+   
     height: calc(100vh-114px);
     margin-top: 50px;
 `
 const Allwrapper = styled.div`
     height: calc(100vh-64px);
     width: 35vw;
-    border-left: 1px solid rgb(200,200,200);
 `
 
 

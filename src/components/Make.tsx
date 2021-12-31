@@ -12,6 +12,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
+
 
 const Textareawrapper = styled.div`
     margin: 20px auto 30px auto;
@@ -62,11 +65,11 @@ const Submitbutton = styled(LoadingButton)`
     margin: 60px auto 0 auto;
     `
 const Categoryinput = styled(InputBase)`
-    width: 200px;
-    margin: 0px 5px 0px 30px;
+    width: 160px;
+    margin: 0px 10px 0px 30px;
     border: 1px solid rgb(100,100,100);
     border-radius: 5px;
-    padding-left: 10px;
+    padding-left: 5px;
     ${({ error }) => error && `
         border-color: red;
     `}
@@ -77,7 +80,7 @@ const Categorywrapper = styled.div`
     align-items: center;
 `
 const Keyword = styled.div`
-    margin-left: 30px;
+    margin-left: 5px;
 `
 const Buttonwrapper = styled.div`
     margin-top: 80px;
@@ -120,11 +123,11 @@ function Make(props: Props) {
     }, []);
     const handlecircular = (i: number) => {
         if (!circleloading[i]) {
-            setSuccess(success.map((suc, index) => (index == i ? false : suc)));
-            setCircleloading(circleloading.map((circle, index) => (index == i ? true : circle)));
+            setSuccess(success.map((suc, index) => (index === i ? false : suc)));
+            setCircleloading(circleloading.map((circle, index) => (index === i ? true : circle)));
             timer.current = window.setTimeout(() => {
-                setSuccess(success.map((suc,index) => (index == i ? true: suc)));
-                setCircleloading(circleloading.map((circle, index) => (index == i ? false : circle)));
+                setSuccess(success.map((suc,index) => (index === i ? true: suc)));
+                setCircleloading(circleloading.map((circle, index) => (index === i ? false : circle)));
             }, 2000);
         }
     };
@@ -175,48 +178,48 @@ function Make(props: Props) {
         })
     };
     const handlechange = (e: any) => {
-        if (inputid == '1') {
+        if (inputid === '1') {
             setImage1(e.target.files[0])
             setInputid('2');
-        } else if (inputid == '2') {
+        } else if (inputid === '2') {
             setImage2(e.target.files[0])
             setInputid('3')
-        } else if (inputid == '3') {
+        } else if (inputid === '3') {
             setImage3(e.target.files[0])
         }
     }
     const handledelete = (i: number) => {
-        if (i == 1 && success[0]) {
+        if (i === 1 && success[0]) {
             if (success[1]) {
                 if (success[2]) {
                     setImage1(image2);
                     setImage2(image3);
                     setImage3('');
-                    setSuccess(success.map((_, index) => (index == 2 ? false : true)))
+                    setSuccess(success.map((_, index) => (index === 2 ? false : true)))
                 } else {
                     setImage1(image2);
                     setImage2('');
-                    setSuccess(success.map((suc,index) => (index == 1 ? false : suc)))
+                    setSuccess(success.map((suc,index) => (index === 1 ? false : suc)))
                     setInputid('2');
                 }
             } else {
                 setImage1('');
                 setInputid('1');
-                setSuccess(success.map((suc,index) => (index == 0 ? false : suc)))
+                setSuccess(success.map((suc,index) => (index === 0 ? false : suc)))
             }
-        } else if (i == 2 && success[1]) {
+        } else if (i === 2 && success[1]) {
             if (success[2]) {
                 setImage2(image3);
                 setImage3('');
-                setSuccess(success.map((suc,index) => (index == 2 ? false : suc)))
+                setSuccess(success.map((suc,index) => (index === 2 ? false : suc)))
             } else {
                 setImage2('');
-                setSuccess(success.map((suc,index) => (index == 1 ? false : suc)))
+                setSuccess(success.map((suc,index) => (index === 1 ? false : suc)))
                 setInputid('2');
             }
-        } else if (i == 3 && success[2]) {
+        } else if (i === 3 && success[2]) {
             setImage3('');
-            setSuccess(success.map((suc,index) => (index == 2 ? false : suc)))
+            setSuccess(success.map((suc,index) => (index === 2 ? false : suc)))
         }
     }
     
@@ -224,7 +227,7 @@ function Make(props: Props) {
         <>
             <Wrapper>
                 <Message>
-                    {props.type}の作成<br/><Warn>texのテキストは$(半角)で囲んでください</Warn>
+                    <Latex>{props.type}</Latex><br/><Warn>texのテキストは$(半角)で囲んでください</Warn>
                 </Message>
             <Textareawrapper>
                 <TextareaAutosize

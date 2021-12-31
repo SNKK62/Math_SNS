@@ -17,6 +17,9 @@ import Button from '@mui/material/Button';
 import Comments from './Comments'
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import Modal from './Modal'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 // import { CircularProgress } from '@material-ui/core';
 
 const Userwrapper = styled.div`
@@ -32,6 +35,7 @@ const Image = styled.img`
     height: 60px;
     object-fill: cover;
     border-radius: 50%;
+    cursor: pointer;
 `
 const Username = styled.div`
     grid-column-start: 2;
@@ -79,6 +83,7 @@ const Images = styled.img`
     margin: auto;
     object-fit: contain;
     height: 200px;
+    cursor: pointer;
 `
 const Description = styled.div`
     white-space: pre-wrap;
@@ -106,7 +111,6 @@ const Slidewrapper = styled.div`
     .slick-next:before {
         color: black;
     }
-    border-bottom: 1px solid rgb(200,200,200);
     padding: 30px 20px 30px 20px;
 `
 const Buttonarea = styled.div`
@@ -114,10 +118,20 @@ const Buttonarea = styled.div`
     height: 40px;
     text-align: right;
     margin: auto;
+    border-top: 1px solid rgb(200,200,200);
+`
+const Buttonarea2 = styled.div`
+    width: 100%;
+    height: 40px;
+    text-align: left;
+    padding-left: 10px;
+    border-top: 1px solid rgb(200,200,200);
+    display: flex;
+
 `
 const Allwrapper = styled.div`
     position: fixed;
-    z-index: 100;
+    z-index: 600;
     width: 100vw;
     height: 100vh;
     background-color: rgb(0,0,0,0.5);
@@ -133,11 +147,21 @@ const Wrapper = styled.div`
     @media(min-width: 600px){
         width: 60vw;
         box-sizing: border-box;
+        z-index: 100;
     }
     @media(min-width: 1025px){
         width: 45vw;
         box-sizing: border-box;
+        z-index: 100;
     }
+`
+const Like = styled.div`
+    width: 50%;
+    display: flex;
+    align-items: center;
+`
+const Iconwrapper = styled.div`
+    
 `
 const initialState = {
     isLoading: true,
@@ -182,19 +206,34 @@ function Problem(props: Propsstate) {
     const [open, setOpen] = useState(false);
     const [imageurl, setImageurl] = useState('');
     const navigate = useNavigate()
-    
+    const [modal, setModal] = useState(false)
+    const [like, setLike] = useState(false)
+    const [count, setCount] = useState(0)
+    const [loadlike, setLoadlike] = useState(true)
 
     useEffect(() => {
-        if (!dataState.ifLoading) {
-            dispatch({type: 'init', payload: ''})
+        if (!dataState.isLoading) {
+            dispatch({ type: 'init', payload: '' })
         }
+        window.scroll({top: 0, behavior: 'smooth'});
         axios.get(problem_url).then(resp => {
+            props.ifproblem ? setCount(resp.data.problem.plike_count) : setCount(resp.data.problem.slike_count)
             dispatch({ type: 'success', payload: resp.data })
-            console.log(dataState.post)
+            console.log(resp.data)
+                if (props.logged_in.bool && props.logged_in.id !== resp.data.problem.user_id){
+                    axios.get(problem_url + '/iflike').then(resp => {
+                        setLike(resp.data.iflike)
+                        setLoadlike(false)
+                    }).catch(e => {
+                        console.log(e)
+                    })
+                } else {
+                    setLoadlike(false)
+                }
         }).catch(e => {
             console.log(e);
         })
-    }, [props.ifproblem])
+    }, [props.ifproblem,id])
     const toproblem = () => {
         dispatch({type: 'init', payload: ''})
         navigate('/problems/'+dataState.post.problem.problem_id)
@@ -203,10 +242,30 @@ function Problem(props: Propsstate) {
         navigate('/problems/'+id+'/edit')
     }
     const handledelete = () => {
-        dispatch({type: 'init', payload: ''})
         axios.delete(url + '/problems/' + id).then(() => {
-            navigate('/users/'+props.logged_in.id,{replace: true})
+            setModal(false)
+            navigate('/users/' + props.logged_in.id, { replace: true })
         }).catch (e => {
+            console.log(e)
+        })
+    }
+    const handlelike = () => {
+        setLike(true)
+        setCount(count+1)
+        axios.post(problem_url + '/like').then(() => {
+            console.log('Success to like')
+        }).catch(e => {
+            setLike(false)
+            console.log(e)
+        })
+    }
+    const handleunlike = () => {
+        setLike(false)
+        setCount(count-1)
+        axios.delete(problem_url + '/unlike').then(() => {
+            console.log('Success to unlike')
+        }).catch(e => {
+            setLike(true)
             console.log(e)
         })
     }
@@ -218,24 +277,34 @@ function Problem(props: Propsstate) {
         setOpen(false)
         setImageurl('')
     }
+    const modalopen = () => {
+        setModal(true)
+    }
+    const modalclose = () => {
+        setModal(false)
+    }
+    
     return (<>
         {open && Openimage({ url: imageurl, close: handleclose })}
+        {modal &&
+            <Modal delete={handledelete} close={modalclose} />
+        }
         {dataState.isLoading ?
-           <Loadingwrapper><Loading /></Loadingwrapper> : <>
+        <Loadingwrapper><Loading /></Loadingwrapper> : <>
             <Wrapper>
             <Userwrapper>
                 <Imagewrapper>
-                        <Image src={dataState.post.user_image}/>
+                        <Image src={dataState.post.user_image} onClick={() => {navigate('/users/'+String(dataState.post.problem.user_id))} }/>
                 </Imagewrapper>
                     <Username>{dataState.post.user_name}</Username>
             </Userwrapper>
             <Tagdiv>
                         {props.ifproblem ? <Tagwrapper id='tag'>#{dataState.post.problem.category}</Tagwrapper> : <Button sx={{width: '30%',margin: 'auto'}} variant='text' onClick={toproblem}>問題を見る</Button>}
-                {dataState.post.problem.user_id == props.logged_in.id && <Buttonwrapper>
+                {dataState.post.problem.user_id === props.logged_in.id && <Buttonwrapper>
                     <IconButton onClick={toedit}>
                         <EditIcon/>        
                     </IconButton>
-                    <IconButton onClick={handledelete} sx={{color: 'red'}}>
+                    <IconButton onClick={modalopen} sx={{color: 'red'}}>
                         <DeleteForeverIcon/>
                     </IconButton>    
                 </Buttonwrapper>}
@@ -247,37 +316,47 @@ function Problem(props: Propsstate) {
                             props.ifproblem ?
                                 <Slide {...settings}>
                                 {dataState.post.problem.image1_url &&
-                                        <Problemimage onClick={() => {handleopen(dataState.post.problem.image1_url)}} >
-                                            <Images src={dataState.post.problem.image1_url} />
+                                        <Problemimage  >
+                                            <Images src={dataState.post.problem.image1_url} onClick={() => {handleopen(dataState.post.problem.image1_url)}}/>
                                         </Problemimage>}
                                     
                                     {dataState.post.problem.image2_url &&
-                                        <Problemimage onClick={() => {handleopen(dataState.post.problem.image2_url)}}>
-                                            <Images src={dataState.post.problem.image2_url} />
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image2_url} onClick={() => {handleopen(dataState.post.problem.image2_url)}}/>
                                         </Problemimage>}
                                     {dataState.post.problem.image3_url &&
                                         <Problemimage onClick={() => {handleopen(dataState.post.problem.image3_url)}}>
-                                            <Images src={dataState.post.problem.image3_url} />
+                                            <Images src={dataState.post.problem.image3_url} onClick={() => {handleopen(dataState.post.problem.image3_url)}}/>
                                         </Problemimage>}
                                 </Slide> :
                                 <Slide {...settings}>
                                     {dataState.post.problem.image1s_url &&
-                                        <Problemimage onClick={() => {handleopen(dataState.post.problem.image1s_url)}}>
-                                            <Images src={dataState.post.problem.image1s_url} />
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image1s_url} onClick={() => {handleopen(dataState.post.problem.image1s_url)}}/>
                                         </Problemimage>}
                                     {dataState.post.problem.image2s_url &&
-                                        <Problemimage onClick={() => {handleopen(dataState.post.problem.image2s_url)}}>
-                                            <Images src={dataState.post.problem.image2s_url} />
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image2s_url} onClick={() => {handleopen(dataState.post.problem.image2s_url)}}/>
                                         </Problemimage>}
                                     {dataState.post.problem.image3s_url &&
-                                        <Problemimage onClick={() => {handleopen(dataState.post.problem.image3s_url)}}>
-                                            <Images src={dataState.post.problem.image3s_url} />
+                                        <Problemimage >
+                                            <Images src={dataState.post.problem.image3s_url} onClick={() => {handleopen(dataState.post.problem.image3s_url)}}/>
                                         </Problemimage>}
                                 </Slide>}</>
                     }
                 </Slidewrapper>
+                    <Buttonarea2>
+                    <Iconwrapper>
+                    {(props.logged_in.bool && props.logged_in.id !== dataState.post.problem.user_id) && <>
+                        {like ? <IconButton sx={{ color: 'pink' }} onClick={handleunlike}>
+                            <FavoriteIcon />
+                        </IconButton> : <IconButton  onClick={handlelike} >
+                            <FavoriteBorderIcon />
+                        </IconButton>}
+                            </>}  </Iconwrapper> <Like id='count'>{count}いいね</Like>
+                </Buttonarea2>    
                 <Buttonarea>
-                    {props.ifproblem &&<>
+                    {(props.ifproblem && !loadlike) &&<>
                         <Button variant='text' onClick={() => { navigate('/problems/' + id + '/solutions') }} sx={{color: 'red'}}>解答を見る</Button>
                         <Button variant='text' onClick={() => { navigate('/problems/' + id + '/solutions/new') }}>解答する</Button>
                     </>}

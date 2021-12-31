@@ -114,7 +114,7 @@ function Editproblem(props: Props) {
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(get_url).then(resp => {
-            if (resp.data.problem.user_id != props.logged_in.id) {
+            if (resp.data.problem.user_id !== props.logged_in.id) {
                 navigate('/problems/' + id, { replace: true })
                 return 
             }
@@ -170,11 +170,11 @@ function Editproblem(props: Props) {
     }, []);
     const handlecircular = (i: number) => {
         if (!circleloading[i]) {
-            setSuccess(success.map((suc, index) => (index == i ? false : suc)));
-            setCircleloading(circleloading.map((circle, index) => (index == i ? true : circle)));
+            setSuccess(success.map((suc, index) => (index === i ? false : suc)));
+            setCircleloading(circleloading.map((circle, index) => (index === i ? true : circle)));
             timer.current = window.setTimeout(() => {
-                setSuccess(success.map((suc,index) => (index == i ? true: suc)));
-                setCircleloading(circleloading.map((circle, index) => (index == i ? false : circle)));
+                setSuccess(success.map((suc,index) => (index === i ? true: suc)));
+                setCircleloading(circleloading.map((circle, index) => (index === i ? false : circle)));
             }, 2000);
         }
     };
@@ -219,13 +219,13 @@ function Editproblem(props: Props) {
         })
     };
     const handlechange = (e: any, i: number) => {
-        if (i == 1) {
+        if (i === 1) {
             setImage1(e.target.files[0])
         }
-        else if (i == 2) {
+        else if (i === 2) {
             setImage2(e.target.files[0])
         }
-        else if (i == 3) {
+        else if (i === 3) {
             setImage2(e.target.files[0])
         }
     }
@@ -236,17 +236,17 @@ function Editproblem(props: Props) {
         setKeyword(e.target.value);
     }
     const handledelete = (i: number) => {
-        if (i == 1 && success[0]) {
+        if (i === 1 && success[0]) {
             if (success[1]) {
                 setImage1('');
-                setSuccess(success.map((suc,index) => (index == 0 ? false : suc)))
+                setSuccess(success.map((suc,index) => (index === 0 ? false : suc)))
             }
-        } else if (i == 2 && success[1]) {
+        } else if (i === 2 && success[1]) {
                 setImage2('');
-                setSuccess(success.map((suc,index) => (index == 1 ? false : suc)))
-        } else if (i == 3 && success[2]) {
+                setSuccess(success.map((suc,index) => (index === 1 ? false : suc)))
+        } else if (i === 3 && success[2]) {
             setImage3('');
-            setSuccess(success.map((suc,index) => (index == 2 ? false : suc)))
+            setSuccess(success.map((suc,index) => (index === 2 ? false : suc)))
         }
     }
     

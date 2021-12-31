@@ -6,6 +6,8 @@ import { useRef,  useState, useEffect } from 'react';
 import { useNavigate, useParams, useMatch } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
 const Textareawrapper = styled.div`
     margin: 20px auto 30px auto;
@@ -74,7 +76,7 @@ function Makecomment(props: Props) {
     
     return (
         <Wrapper>
-            <Message>コメントの作成<br/><Warn>texのテキストは$(半角)で囲んでください</Warn></Message>
+            <Message><Latex>$Comment$</Latex><br/><Warn>texのテキストは$(半角)で囲んでください</Warn></Message>
             <Textareawrapper>
             <TextareaAutosize
                 aria-label="minimum height"

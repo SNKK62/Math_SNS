@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Searchprocess() {
     const navigate = useNavigate();
     useEffect(() => {
-        if (window.innerWidth >= 600) {
+        if (window.innerWidth >= 1025) {
             navigate('/users',{replace: true})
         }
     })

@@ -10,11 +10,20 @@ import Loadingwrapper from './Loadingwrapper';
 import dataFetch from './DataFetch';
 import newuserimage from '../newuserimage.png';
 import Wrapper from './Wrapper';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
+
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
+    width: 80%;
+`
 
 const Message = styled.div`
     font-size: 30px;
     margin-top: 30px;
+    white-space: pre-wrap;
 `
 const Textinput = styled(TextField)`
     width: 100%;
@@ -100,16 +109,18 @@ function Edituser(props: Props) {
     const Imageref = useRef(null);
     const [imgurl, setImgurl] = useState('');
     const [error, setError] = useState('')
+    const [text, setText] = useState('')
     const navigate = useNavigate();
     
     useEffect(() => {
-        if (!props.logged_in.bool || props.logged_in.id != Number(id)) {
+        if (!props.logged_in.bool || props.logged_in.id !== Number(id)) {
             navigate('/users/' + props.logged_in.id + '/edit',{replace: true})
             return
         }
         axios.get(user_url).then(resp => {
             setImgurl(resp.data.user.image_url);
             setName(resp.data.user.name)
+            setText(resp.data.user.description)
             dispatch({ type: 'success', payload: resp.data });
         }).catch(e => {
             console.log(e);
@@ -137,12 +148,15 @@ function Edituser(props: Props) {
         const image: any = Imageref.current;
         const data = new FormData();
         data.append('user[name]', name)
-        if (ifdefault == 'default') {
+        if (ifdefault === 'default') {
             data.append('user[image]', 'default');  
         } else if (!image.files[0]) {
             data.append('user[image]', 'nondefault');
         } else {
             data.append('user[image]', image.files[0]);
+        }
+        if (text) {
+            data.append('user[description]', text)
         }
         axios.patch(user_url, data).then(resp => {
             setLoading(false);
@@ -158,6 +172,9 @@ function Edituser(props: Props) {
     const handlename = (e: any) => {
         setName(e.target.value) 
     }
+    const changetext = (e: any) => {
+        setText(e.target.value)
+    }
     
     return (
         <>
@@ -167,7 +184,9 @@ function Edituser(props: Props) {
                 </Loadingwrapper> :
             <Wrapper>
                     <Message>
-                        Edit
+                        <Latex>
+                            $Edit$  $profile$
+                        </Latex>
                     </Message>
                     <Filewrapper>
                         <Filebutton htmlFor='file-input'>
@@ -179,6 +198,16 @@ function Edituser(props: Props) {
                     <Textwrapper>
                         <Textinput id='name' error={error ? true : false} label="ユーザー名" variant="standard" onChange={e => { handlename(e) }} defaultValue={dataState.post.user.name} placeholder='11文字以下'/>
                     </Textwrapper>
+                    <Textareawrapper>
+                        <TextareaAutosize
+                            aria-label="minimum height"
+                            minRows={3}
+                            style={{ width: '100%' }}
+                            placeholder='紹介文を書いてください'
+                            onChange = {e => {changetext(e)}}
+                            defaultValue={dataState.post.user.description}
+                            />
+                        </Textareawrapper>
                     {error && 
                         <Errortext>
                             {error === 'empty' && 'ユーザー名を入力してください'}

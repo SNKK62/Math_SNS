@@ -12,7 +12,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 import Loading from './Loading';
 import Loadingwrapper from './Loadingwrapper';
-import { useLocation } from 'react-router-dom';
+import { useLocation ,useNavigate} from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,7 +23,12 @@ const Loading2 = styled(Loading)`
     width: 100%;
 `
 
-
+const Count = styled.div`
+    width: 100%;
+    text-align: right;
+    font-size: 12px;
+    padding-right: 15px;
+`
 
 
 
@@ -35,7 +40,7 @@ function Searchproblem() {
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
     var real_url = ''
-    
+    const navigate = useNavigate()
     const query = new URLSearchParams(useLocation().search)
     
     useEffect(() => {
@@ -53,7 +58,9 @@ function Searchproblem() {
         })
     }, []);
     
-    
+    const toProblem = (id: number) => {
+        navigate('/problems/'+String(id))
+    }
     
     const handlescroll = () => {
         setCircular(true)
@@ -81,20 +88,21 @@ function Searchproblem() {
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
-                        {problems.map((val: any) => {
-                            return (<>
-                                <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
+                        {problems.map((val: any,index) => {
+                            return (<div key={index}>
+                                <ListItemButton sx={{ padding: '0' }} onClick={() => {toProblem(val.id)}}>
                                     <ListItem  key={val.id.to_String+'item'} sx={{ height: '90px', padding: '0' }}>
                                         <Avatar key={val.id.to_String+'avatar'} alt={val.user_name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
                                         <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
                                             <ListItemText  key={val.id.to_String+'item1'} primary={val.user_name} primaryTypographyProps={{ fontSize: '18px', paddingLeft: '25px',paddingTop: '5px' }} />
                                             <Divider key={val.id.to_String+'divider1'} />
                                             <ListItemText key={val.id.to_String+'item3'}  primary={'#'+val.category} primaryTypographyProps={{ fontSize: '14px', paddingLeft: '30px', color: 'blue' }} />
+                                            <Count>{val.plike_count }いいね</Count>
                                         </List>
                                     </ListItem>
                                 </ListItemButton>
                                 <Divider key={val.id.to_String+'divider2'}/>
-                            </>
+                            </div>
                             )
                         })}
                         <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '0' }}>

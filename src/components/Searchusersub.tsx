@@ -11,18 +11,20 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import Avatar from '@mui/material/Avatar';
 import Loading from './Loading';
-import Loadingwrapper from './Loadingwrapper';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import {useNavigate} from 'react-router-dom'
 
 const Loading2 = styled(Loading)`
     height: 100%;
     width: 100%;
 `
-const Loadingwrapper2 = styled(Loadingwrapper)`
+const Loadingwrapper2 = styled.div`
     width: 35vw;
+    height: 90vh;
+    position: relative;
+    z-index: 200;
 `
 
 interface Props {
@@ -37,6 +39,7 @@ function Searchusersub(props: Props) {
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
     var real_url = ''
+    const navigate = useNavigate();
     
     
     useEffect(() => {
@@ -55,7 +58,9 @@ function Searchusersub(props: Props) {
         })
     }, [props.keyword]);
     
-    
+    const toUsers = (id: number) => {
+        navigate('/users/'+String(id))
+    }
     
     const handlescroll = () => {
         setCircular(true)
@@ -85,9 +90,9 @@ function Searchusersub(props: Props) {
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
-                        {users.map((val: any) => {
-                            return (<>
-                                <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
+                        {users.map((val: any,index) => {
+                            return (<div key={index}>
+                                <ListItemButton  sx={{ padding: '0' }} onClick={() => {toUsers(val.id)}}>
                                     <ListItem  key={val.id.to_String+'item'} sx={{ height: '90px', padding: '0' }}>
                                         <Avatar key={val.id.to_String+'avatar'} alt={val.name} src={val.image_url} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
                                         <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
@@ -99,7 +104,7 @@ function Searchusersub(props: Props) {
                                     </ListItem>
                                 </ListItemButton>
                                 <Divider key={val.id.to_String+'divider2'}/>
-                            </>
+                            </div>
                             )
                         })}
                         <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '0' }}>

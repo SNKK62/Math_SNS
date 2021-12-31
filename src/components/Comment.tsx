@@ -1,7 +1,7 @@
 
 import styled from 'styled-components';
 import dataFetch from './DataFetch';
-import { useReducer,useEffect } from 'react';
+import { useReducer,useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from './axios';
 import { url } from './url';
@@ -14,6 +14,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Button from '@mui/material/Button';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import Modal from './Modal';
 
 
 
@@ -29,6 +30,7 @@ const Image = styled.img`
     height: 60px;
     object-fill: cover;
     border-radius: 50%;
+    cursor: pointer;
 `
 const Username = styled.div`
     grid-column-start: 2;
@@ -79,7 +81,7 @@ const Buttonwrapper = styled.div`
     width: 30%;
 `
 const Towrapper = styled.div`
-    width: 70%;
+    width: 30%;
 `
 const Bigwrapper = styled.div`
     width: 100%;
@@ -107,6 +109,7 @@ function Comment(props: Props) {
     const comment_url = url + '/comments/' + id 
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
     const navigate = useNavigate()
+    const [modal , setModal] = useState(false)
     useEffect(() => {
         axios.get(comment_url).then(resp => {
             dispatch({ type: 'success', payload: resp.data })
@@ -126,20 +129,29 @@ function Comment(props: Props) {
         navigate('/comments/'+id+'/edit')
     }
     const handledelete = () => {
-        dispatch({ type: 'init', payload: '' })
         axios.delete(url + '/comments/' + id).then(() => {
+            setModal(false)
             navigate('/users/' + props.logged_in.id, { replace: true })
         }).catch(e => {
             console.log(e)
         })
     }
+    const modalopen = () => {
+        setModal(true)
+    }
+    const modalclose = () => {
+        setModal(false)
+    }
     return (<>
+            {modal &&
+                <Modal delete={handledelete} close={modalclose} />
+            }
         {dataState.isLoading ?
             <Loadingwrapper><Loading /></Loadingwrapper> : 
             <Wrapper>
             <Userwrapper>
                 <Imagewrapper>
-                        <Image src={dataState.post.user_image}/>
+                        <Image src={dataState.post.user_image} onClick={() => {navigate('/users/'+String(dataState.post.comment.user_id))}} />
                 </Imagewrapper>
                     <Username>
                         {dataState.post.user_name}</Username>
@@ -148,11 +160,11 @@ function Comment(props: Props) {
                         <Button variant='text' sx={{ width: '100%' }} onClick={toproblem}>{dataState.post.comment.problem_id ? '問題' : '解答'}に戻る</Button>
                     </Towrapper>
                     
-                    {props.logged_in.id == dataState.post.comment.user_id && <Buttonwrapper>
+                    {props.logged_in.id === dataState.post.comment.user_id && <Buttonwrapper>
                         <IconButton onClick={toedit}>
                             <EditIcon/>
                         </IconButton>
-                        <IconButton sx={{color: 'red'}} onClick={handledelete}>
+                        <IconButton sx={{color: 'red'}} onClick={modalopen}>
                             <DeleteForeverIcon />
                         </IconButton>
                     </Buttonwrapper>}

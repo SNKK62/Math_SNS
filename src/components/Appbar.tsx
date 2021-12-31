@@ -5,7 +5,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 // import Menu from '@mui/material/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import Container from '@mui/material/Container';
@@ -18,7 +18,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import InputBase from '@mui/material/InputBase';
 import MediaQuery from 'react-responsive';
-
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
 const SearchInput = styled(InputBase)`
     width: 100%;
@@ -32,6 +33,15 @@ const SearchInput = styled(InputBase)`
     };
     display: flex;
     align-items: center;
+`
+const Title = styled.div`
+    font-size: 15px;
+    @media(min-width: 600px){
+        font-size: 20px;
+    }
+    @media(min-width: 1025px){
+        font-size: 22px;
+    }
 `
 interface Props {
     logged_in: {
@@ -90,7 +100,7 @@ function Appbar(props: Props) {
         navigate('/users/'+props.logged_in.id)
     }
     return (<>
-        <AppBar position="sticky"  sx={{height: '64px', bgcolor: 'white',zIndex: '10', boxShadow: '0 1px 5px rgb(200,200,200)' ,color: 'rgb(100,100,100)'}}>
+        <AppBar position="sticky"  sx={{height: '64px', bgcolor: 'white',zIndex: '500', boxShadow: '0 1px 5px rgb(200,200,200)' ,color: 'rgb(100,100,100)'}}>
             <Container maxWidth="xl" sx={{height: '64px'}}>
                 <Toolbar disableGutters sx={{height: '64px'}}>
                     {(ifsearch || ifsearchprocess) ?
@@ -112,8 +122,18 @@ function Appbar(props: Props) {
                                 </IconButton>
                             </Box>
                         </> : <>
-                        <MediaQuery query='(max-width: 600px)'>
-                        <Box sx={{ flexGrow: 1, display: 'flex' }}  >
+                            <Box sx={{ flexGrow: 1, display: 'flex' }}  >
+                            <IconButton
+                                size="medium"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="inherit"
+                                onClick={() => {navigate(-1)}}
+                            >
+                                <ArrowBackIcon  />
+                            </IconButton>
+                            <MediaQuery query='(max-width: 600px)'>
                             <Tooltip title="サイドバーを開く">
                                 <IconButton
                                     size="large"
@@ -126,12 +146,14 @@ function Appbar(props: Props) {
                                     <MenuIcon  />
                                 </IconButton>
                             </Tooltip>
+                            </MediaQuery>
                         </Box >
-                        </MediaQuery>
                         <Box sx={{ position: 'absolute', left: '24vw', width: '40vw', textAlign: 'center' }}>
-                            <Typography>
-                                Math-Sns
-                            </Typography>
+                            <Title>
+                                <Latex>
+                                    $Mualphatheta$
+                                </Latex>
+                            </Title>
                         </Box>
                     
 
@@ -142,14 +164,16 @@ function Appbar(props: Props) {
                                 </IconButton>
                             </MediaQuery>        
                                 {props.logged_in.bool &&
-                                    <IconButton sx={{ p: 0 }}>
-                                        <Avatar onClick={toProfile} alt="ユーザー" src={props.logged_in.image} />
+                                    <IconButton sx={{ p: 0 }} onClick={toProfile}>
+                                        <Avatar alt="中" src={props.logged_in.image} />
                                     </IconButton>}
                         </Box>
                     </>}
                 </Toolbar>
             </Container>
-            <Sidebar state={state} setState={setState} toggleDrawer={toggleDrawer} logged_in={props.logged_in} handledelete={props.handledelete}/>
+            <MediaQuery query='(max-width: 599px)'>
+                <Sidebar state={state} setState={setState} toggleDrawer={toggleDrawer} logged_in={props.logged_in} handledelete={props.handledelete}/>
+            </MediaQuery>
             </AppBar>
             
     </>

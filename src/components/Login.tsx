@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { url } from './url';
 import Wrapper from './Wrapper';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
 const Text = styled(TextField)`
     width: 100%;
@@ -22,6 +24,7 @@ const Button = styled(LoadingButton)`
 const Message = styled.div`
     font-size: 30px;
     margin: 10vh auto 0 auto;
+    white-space: pre-wrap;
 `
 const Errortext = styled.div`
     width: 100%;
@@ -85,7 +88,9 @@ function Login(props: Props) {
     return (
         <Wrapper>
             <Message>
-                Log in
+                <Latex>
+                    $Log$  $In$
+                </Latex>
             </Message>
                {error && <Errortext>ユーザー名またはパスワードが正しくありません</Errortext>}
             <Textwrapper>

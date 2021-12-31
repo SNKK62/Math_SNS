@@ -54,7 +54,7 @@ function Editcomment(props: Props) {
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(get_url).then(resp => {
-            if (props.logged_in.id != resp.data.comment.user_id) {
+            if (props.logged_in.id !== resp.data.comment.user_id) {
                 navigate('/comments/'+id, {replace: true})
             }
             setTextarea(resp.data.comment.text);

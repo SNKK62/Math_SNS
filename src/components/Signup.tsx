@@ -7,6 +7,16 @@ import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import newuserimage from '../newuserimage.png';
 import Wrapper from './Wrapper';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
+
+const Textareawrapper = styled.div`
+    margin: 20px auto 30px auto;
+    width: 80%;
+`
+
+
 
 const Input = styled(TextField)`
     width: 100%;
@@ -43,6 +53,7 @@ const Message = styled.div`
     width: 100%;
     text-align: center;
     margin: 30px auto;
+    white-space: pre-wrap;
 `
 const Button = styled(LoadingButton)`
     width: 150px;
@@ -90,6 +101,7 @@ const Signup: React.FC<Props> = (props) => {
     const Passref = useRef(null);
     const Passconfref = useRef(null);
     const Imageref = useRef(null);
+    const textref = useRef(null);
     const navigate = useNavigate();
     const [nameerror, setNameerror] = useState('');
     const [passerror, setPasserror] = useState(false);
@@ -115,6 +127,7 @@ const Signup: React.FC<Props> = (props) => {
         const name: any = Nameref.current;
         const pass: any = Passref.current;
         const passconf: any = Passconfref.current;
+        const text: any = textref.current;
         const image: any = Imageref.current;
         if (!name || !name.childNodes[1].childNodes[0].value) {
             error1 = true;
@@ -126,7 +139,7 @@ const Signup: React.FC<Props> = (props) => {
             error2 = true;
             setPasserror(true)
         }
-        if (!passconf || pass.childNodes[1].childNodes[0].value != passconf.childNodes[1].childNodes[0].value) {
+        if (!passconf || pass.childNodes[1].childNodes[0].value !== passconf.childNodes[1].childNodes[0].value) {
             error3 = true;
             setPassconferror(true)
         }
@@ -138,10 +151,13 @@ const Signup: React.FC<Props> = (props) => {
         data.append('user[name]', name.childNodes[1].childNodes[0].value)
         data.append('user[password]', pass.childNodes[1].childNodes[0].value)
         data.append('user[password_confirmation]', passconf.childNodes[1].childNodes[0].value)
-        if (!image.files[0] || ifdefault=='default') {
+        if (!image.files[0] || ifdefault==='default') {
             data.append('user[image]', '')
         } else {
             data.append('user[image]', image.files[0])
+        }
+        if (text && text.value) {
+            data.append('user[description]', text.value)
         }
         console.log(image.files[0])
         console.log(data)
@@ -173,7 +189,7 @@ const Signup: React.FC<Props> = (props) => {
    
     return (
         <Wrapper>
-            <Message>Sign Up</Message>
+            <Message><Latex>$Sign$  $up$</Latex></Message>
             <Filewrapper2>
                 <Filewrapper htmlFor='fileinput'>
                     <Preview src={imgurl}  />
@@ -186,6 +202,15 @@ const Signup: React.FC<Props> = (props) => {
                 {nameerror === 'empty' && 'ユーザー名を入力してください'}
                 {nameerror === 'exist' && 'そのユーザー名は使えません'}
                 {nameerror === 'long' && '名前は11文字以下です'}</>}
+            <Textareawrapper>
+                <TextareaAutosize
+                    aria-label="minimum height"
+                    minRows={3}
+                    style={{ width: '100%' }}
+                    placeholder='紹介文を書いてください'
+                ref={textref}
+                    />
+            </Textareawrapper>
             <Inputwrapper><Input  ref={Passref} error={passerror} label="パスワード" variant="outlined" type='password' placeholder='６文字以上'/></Inputwrapper>
             {passerror && <Errortext>パスワードは６文字以上です</Errortext>}
             <Inputwrapper><Input ref={Passconfref} error={passconferror} label="パスワード確認" variant="outlined" type='password' /></Inputwrapper>

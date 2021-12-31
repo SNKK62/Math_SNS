@@ -35,10 +35,10 @@ function Sidebar(props: Props) {
   const toPage = (s: string) => {
     if (s === 'プロフィール') {
       navigate('/')
-    } else if (s === 'ユーザー一覧') {
-      navigate('/users')
-    } else if (s === '問題一覧') {
-      navigate('/problems')
+    } else if (s === 'いいねした問題') {
+      navigate('/users/like_problems')
+    } else if (s === 'いいねした解答') {
+      navigate('/users/like_solutions')
     } else if (s === '問題投稿') {
       navigate('/problems/new')
     } else if (s === 'サインアップ') {
@@ -62,8 +62,8 @@ function Sidebar(props: Props) {
       <Divider /></>}
       {props.logged_in.bool ? <>
         <List>
-          {['プロフィール', 'ユーザー一覧', '問題一覧', '問題投稿'].map((text, _) => (
-            <ListItem button key={text} onClick={() => { toPage(text) }}  >
+          {['プロフィール', 'いいねした問題', 'いいねした解答', '問題投稿'].map((text, index) => (
+            <ListItem button key={index} onClick={() => { toPage(text) }}  >
               <ListItemText primary={text} sx={{ marginLeft: '20px' }} />
             </ListItem>
           ))}
@@ -74,11 +74,11 @@ function Sidebar(props: Props) {
           </ListItem>
         </List></> :
         <List>
-          {['ログイン', 'サインアップ'].map((text, _) => (<>
-            <ListItem button key={text} onClick={() => { toPage(text) }}  >
+          {['ログイン', 'サインアップ'].map((text, index) => (<div key={index}>
+            <ListItem button  onClick={() => { toPage(text) }}  >
               <ListItemText primary={text} sx={{ marginLeft: '20px' }} />
             </ListItem>
-            <Divider/></>
+            <Divider/></div>
           ))}
         </List>}
         

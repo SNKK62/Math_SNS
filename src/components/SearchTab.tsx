@@ -71,7 +71,7 @@ function SearchTab(props: Props) {
         props.setValue(index);
     };
   useEffect(() => {
-    if (window.innerWidth >= 600) {
+    if (window.innerWidth >= 1025) {
        navigate('/users',{replace: true})
      }
    })

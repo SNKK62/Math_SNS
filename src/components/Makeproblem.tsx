@@ -11,7 +11,7 @@ interface Props {
 
 function Makeproblem(props: Props) {
     return (
-     <Make type='問題' ifproblem={true} logged_in={props.logged_in}/>       
+     <Make type='$Problem$' ifproblem={true} logged_in={props.logged_in}/>       
     )
 }
 

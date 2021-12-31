@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar'
 import ListItemButton from '@mui/material/ListItemButton';
 import styled from 'styled-components';
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 
@@ -24,7 +24,7 @@ const Textwrapper = styled.div`
     font-size: 14px;
 `
 const Loadingwrapper = styled.div`
-    padding-top: 15px;
+    padding: 15px 0 15px 0;
     margin: auto;
     width: 100%;
     text-align: center;
@@ -43,6 +43,7 @@ function Comments(props: Props) {
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
     var real_url = ''
+    const navigate = useNavigate()
 
     
 
@@ -64,6 +65,9 @@ function Comments(props: Props) {
         })
     }, [props.ifproblem]);
     
+    const toComment = (comment_id: number) => {
+        navigate('/comments/'+comment_id)
+    }
     
     const handlescroll = () => {
         setCircular(true)
@@ -88,9 +92,9 @@ function Comments(props: Props) {
             :
             <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>
-                        {comments.map((val: any) => {
-                            return (<>
-                                <ListItemButton key={val.id.to_String} sx={{ padding: '0' }} >
+                        {comments.map((val: any,index) => {
+                            return (<div key={index}>
+                                <ListItemButton  sx={{ padding: '0' }} onClick={() => {toComment(val.id)}}>
                                     <ListItem  key={val.id.to_String+'item'} sx={{ padding: '0' }}>
                                         <Avatar key={val.id.to_String+'avatar'} alt={val.user_name} src={val.user_image} sx={{ height: '40px', width: '40px', marginLeft: '10px' }} />
                                         <List key={val.id.to_String+'list'} sx={{ width: '80%', paddingLeft: '10px', padding: '0 0 0 5px' }}>
@@ -108,12 +112,12 @@ function Comments(props: Props) {
                                     
                                 </ListItemButton>
                                 <Divider key={val.id.to_String+'divider2'}/>
-                            </>
+                            </div>
                             )
                         })}
-                        <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '0' }}>
+                        <ListItem id='miniload' key='loaditem' sx={{ height: '70px', padding: '10px 0 10px 0' }}>
                         {!circular ? <>
-                        { !disable && <Fab aria-label="add" sx={{  border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll} >
+                        { !disable && <Fab aria-label="add" sx={{ border: '1px rgb(98,224,224) solid',margin: 'auto', color: 'rgb(98,224,224)', bgcolor: 'rgb(400,400,400)' ,'&:hover': {bgcolor: 'rgb(200,200,200)',color: 'rgb(400,400,400)',border:'none'}, '&:disabled': {opacity: '0.7', border: 'none'}}} onClick={handlescroll} >
                             <AddIcon  />
                             </Fab>}</> : 
                             <CircularProgress sx={{margin: 'auto'}} />
