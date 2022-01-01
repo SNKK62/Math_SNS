@@ -85,7 +85,7 @@ const App: React.VFC = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get(url + '/logged_in').then(resp => {
+    axios.get(url + '/logged_in', { withCredentials: true }).then(resp => {
       setLogged_in({ bool: resp.data.bool, id: resp.data.id ,image: resp.data.image, name: resp.data.name});
       setLoad(false);
     }).catch(e => {
@@ -95,7 +95,7 @@ const App: React.VFC = () => {
   
   const handledelete = () => {
     setLoading(true)
-    axios.delete(url + '/logout').then((resp) => {
+    axios.delete(url + '/logout', { withCredentials: true }).then((resp) => {
       console.log(resp)
       setLogged_in({ bool: false, id: -1, image: '', name: '' })
       setLoading(false)
