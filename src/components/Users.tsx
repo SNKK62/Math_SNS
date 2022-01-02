@@ -40,7 +40,7 @@ function Searchuser() {
     
     useEffect(() => {
         setTimes(0)
-        axios.get(search_url + 0 + '/' ).then(resp => {
+        axios.get(search_url + 0 + '/').then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
             if (resp.data.ifend) {
@@ -50,7 +50,7 @@ function Searchuser() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [search_url]);
     
     const toUsers = (id: number) => {
         navigate('/users/'+String(id))

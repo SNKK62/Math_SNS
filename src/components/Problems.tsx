@@ -55,7 +55,7 @@ function Problems() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [search_url]);
     
     const toProblem = (id: number) => {
         navigate('/problems/'+String(id))

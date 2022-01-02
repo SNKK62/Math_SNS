@@ -39,7 +39,7 @@ function Searchuser() {
     
     useEffect(() => {
         setTimes(0)
-        axios.get(query.get('keyword') ? search_url + String(times+1) + '/' + query.get('keyword') : search_url + String(times+1) + '/' ).then(resp => {
+        axios.get(query.get('keyword') ? search_url + '0/' + query.get('keyword') : search_url + '0/' ).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
             if (resp.data.ifend) {
@@ -49,7 +49,7 @@ function Searchuser() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [query,search_url]);
     
     const toUsers = (id: number) => {
         navigate('/users/'+String(id))

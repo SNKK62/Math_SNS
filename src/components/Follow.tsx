@@ -50,9 +50,7 @@ function Follow(props: Props) {
     
     
     useEffect(() => {
-        if (!load) {
-            setLoad(true)
-        }
+        setLoad(true)
         axios.get(props.iffollower ? search_url+'/followers' : search_url+'/followings').then(resp => {
             setUsers([...resp.data.user]);
             setUsername(resp.data.user_name)
@@ -60,7 +58,7 @@ function Follow(props: Props) {
         }).catch(e => {
             console.log(e)
         })
-    }, [id]);
+    }, [id,props.iffollower,search_url]);
     
     const toUsers = (id: number) => {
         navigate('/users/' + String(id))

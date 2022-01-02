@@ -61,7 +61,7 @@ function Solutions() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [id]);
     
     
     

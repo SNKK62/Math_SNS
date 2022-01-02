@@ -54,10 +54,10 @@ function Searchproblem() {
             console.log(e)
             setTimes(0)
         })
-    }, [query.get('keyword')]);
+    }, [query, search_url]);
     
     const toProblem = (id: number) => {
-        navigate('/problems/'+String(id))
+        navigate('/problems/'+id)
     }
     
     const handlescroll = () => {

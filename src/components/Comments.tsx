@@ -48,9 +48,7 @@ function Comments(props: Props) {
     
 
     useEffect(() => {
-        if (!load) {
-            setLoad(true)
-        }
+        setLoad(true)
         setTimes(0)
         axios.get(search_url + 0 + '/').then(resp => {
             setComments([...resp.data.comment]);
@@ -62,7 +60,7 @@ function Comments(props: Props) {
             console.log(e)
             setTimes(0)
         })
-    }, [props.ifproblem]);
+    }, [props.ifproblem, search_url]);
     
     const toComment = (comment_id: number) => {
         navigate('/comments/'+comment_id)

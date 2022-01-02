@@ -45,7 +45,7 @@ function Searchusersub(props: Props) {
     useEffect(() => {
         setLoad(true)
         setTimes(0)
-        axios.get(search_url + 0 + '/'+props.keyword).then(resp => {
+        axios.get(search_url + 0 + '/' + props.keyword).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
             if (resp.data.ifend) {
@@ -55,7 +55,7 @@ function Searchusersub(props: Props) {
             console.log(e)
             setTimes(0)
         })
-    }, [props.keyword]);
+    }, [props.keyword, search_url]);
     
     const toUsers = (id: number) => {
         navigate('/users/'+String(id))

@@ -65,7 +65,7 @@ function Searchproblem(props: Props) {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [navigate,props.logged_in.bool,search_url]);
     
     const toProblem = (id: number) => {
         navigate('/problems/'+String(id))
