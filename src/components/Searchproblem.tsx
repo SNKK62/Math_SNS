@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 // import Typography from '@mui/material/Typography';
-import  { useState, useEffect} from 'react';
+import  { useState, useEffect } from 'react';
 import axios from './axios';
 import { url } from './url';
 import List from '@mui/material/List';
@@ -54,7 +54,7 @@ function Searchproblem() {
             console.log(e)
             setTimes(0)
         })
-    }, [query, search_url]);
+    }, [search_url]);
     
     const toProblem = (id: number) => {
         navigate('/problems/'+id)

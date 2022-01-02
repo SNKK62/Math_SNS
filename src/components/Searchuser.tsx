@@ -49,7 +49,7 @@ function Searchuser() {
             console.log(e)
             setTimes(0)
         })
-    }, [query,search_url]);
+    }, [search_url]);
     
     const toUsers = (id: number) => {
         navigate('/users/'+String(id))
