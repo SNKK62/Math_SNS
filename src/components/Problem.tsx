@@ -33,7 +33,7 @@ const Userwrapper = styled.div`
 const Image = styled.img`
     width: 60px;
     height: 60px;
-    object-fill: cover;
+    object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
 `
