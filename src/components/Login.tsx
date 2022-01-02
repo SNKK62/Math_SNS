@@ -70,9 +70,9 @@ function Login(props: Props) {
         const data = new FormData()
         data.append('session[name]', name.childNodes[1].childNodes[0].value);
         data.append('session[password]', pass.childNodes[1].childNodes[0].value);
-        axios.post(login_url, data, { withCredentials: true }).then((resp) => {
+        axios.post(login_url, data).then((resp) => {
             const id = resp.data.id;
-            axios.get(url + '/logged_in', { withCredentials: true }).then(resp => {
+            axios.get(url + '/logged_in').then(resp => {
                 setLoad(false);
                 props.setLogged_in(resp.data)
                 navigate('/users/'+ id);
@@ -89,7 +89,7 @@ function Login(props: Props) {
         <Wrapper>
             <Message>
                 <Latex>
-                    $Log$  $In$
+                    $Log$ $in$
                 </Latex>
             </Message>
                {error && <Errortext>ユーザー名またはパスワードが正しくありません</Errortext>}

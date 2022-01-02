@@ -55,8 +55,7 @@ function Searchproblem(props: Props) {
             navigate('/login')
         }
         setTimes(0)
-        real_url = search_url + '0'; 
-        axios.get(real_url).then(resp => {
+        axios.get(search_url + '0').then(resp => {
             setProblems([...resp.data.solution]);
             setLoad(false)
             if (resp.data.ifend) {

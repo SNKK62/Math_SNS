@@ -212,9 +212,7 @@ function Problem(props: Propsstate) {
     const [loadlike, setLoadlike] = useState(true)
 
     useEffect(() => {
-        if (!dataState.isLoading) {
-            dispatch({ type: 'init', payload: '' })
-        }
+        dispatch({ type: 'init', payload: '' })
         window.scroll({top: 0, behavior: 'smooth'});
         axios.get(problem_url).then(resp => {
             props.ifproblem ? setCount(resp.data.problem.plike_count) : setCount(resp.data.problem.slike_count)
@@ -233,7 +231,7 @@ function Problem(props: Propsstate) {
         }).catch(e => {
             console.log(e);
         })
-    }, [props.ifproblem,id])
+    }, [props.ifproblem,id, problem_url,props.logged_in.id,props.logged_in.bool])
     const toproblem = () => {
         dispatch({type: 'init', payload: ''})
         navigate('/problems/'+dataState.post.problem.problem_id)

@@ -120,7 +120,7 @@ function Make(props: Props) {
         return() => {
             clearTimeout(timer.current);
         };
-    }, []);
+    }, [navigate,props.logged_in.bool]);
     const handlecircular = (i: number) => {
         if (!circleloading[i]) {
             setSuccess(success.map((suc, index) => (index === i ? false : suc)));

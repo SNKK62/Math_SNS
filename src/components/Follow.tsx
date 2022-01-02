@@ -46,7 +46,6 @@ function Follow(props: Props) {
     const [users,setUsers] = useState<any[]>([])
     const [load, setLoad] = useState(true)
     const [username, setUsername] = useState('')
-    var real_url = ''
     const navigate = useNavigate()
     
     
@@ -54,8 +53,7 @@ function Follow(props: Props) {
         if (!load) {
             setLoad(true)
         }
-        real_url = props.iffollower ? search_url+'/followers' : search_url+'/followings'
-        axios.get(real_url).then(resp => {
+        axios.get(props.iffollower ? search_url+'/followers' : search_url+'/followings').then(resp => {
             setUsers([...resp.data.user]);
             setUsername(resp.data.user_name)
             setLoad(false)
@@ -80,8 +78,7 @@ function Follow(props: Props) {
             </Loadingwrapper>
             :<Wrapper>
                 <Intro>
-                    {props.iffollower ? 'あああああああああああ'+'の' : 'あああああああああああ'+'が'}
-                    {props.iffollower ? 'フォロワー' : 'フォローしているユーザー'}        
+                    {props.iffollower ? username+'のフォロワー' : username+'がフォローしているユーザー'}
                 </Intro>
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
                         <Divider key='divider1'/>

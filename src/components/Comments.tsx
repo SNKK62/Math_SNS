@@ -52,8 +52,7 @@ function Comments(props: Props) {
             setLoad(true)
         }
         setTimes(0)
-        real_url = search_url + 0 + '/' ;
-        axios.get(real_url).then(resp => {
+        axios.get(search_url + 0 + '/').then(resp => {
             setComments([...resp.data.comment]);
             setLoad(false)
             if (resp.data.ifend) {

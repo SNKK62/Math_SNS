@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Wrapper from './Wrapper';
-import { useRef, useState, useEffect, useReducer } from 'react';
+import {  useState, useEffect, useReducer } from 'react';
 import axios from './axios';
 import { LoadingButton } from '@mui/lab';
 import { url } from './url';
@@ -50,24 +50,19 @@ function Editcomment(props: Props) {
     const [textarea, setTextarea] = useState('');
     const [load, setLoad] = useState(false);
     
-    const timer = useRef<number>();
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(get_url).then(resp => {
             if (props.logged_in.id !== resp.data.comment.user_id) {
-                navigate('/comments/'+id, {replace: true})
+                navigate('/comments/' + id, { replace: true })
             }
             setTextarea(resp.data.comment.text);
             dispatch({ type: 'success', payload: resp.data })
         }).catch(e => {
             console.log(e);
         })
-    }, [])
-    useEffect(() => {
-        return() => {
-            clearTimeout(timer.current);
-        };
-    }, []);
+    }, [props.logged_in.id, navigate, id, get_url])
+    
     
     const handle = () => {
         setLoad(true);

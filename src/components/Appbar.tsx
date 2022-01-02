@@ -59,7 +59,7 @@ function Appbar(props: Props) {
     const ifsearch = useMatch('/search')
     const ifsearchprocess = useMatch('/searchprocess')
     const query = new URLSearchParams(useLocation().search)
-    const [search, setSearch] = useState(query.get('text'));
+    const [search, setSearch] = useState(query.get('text') ? query.get('text') : '');
     const toggleDrawer = (open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) =>{
         if (
@@ -91,9 +91,6 @@ function Appbar(props: Props) {
         const element = document.querySelector('input')
         if (element) {
             element.focus();
-        }
-        if (search) {
-            setSearch('')
         }
     },[])
     const toProfile = () => {

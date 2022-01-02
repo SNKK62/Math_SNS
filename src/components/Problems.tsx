@@ -44,8 +44,7 @@ function Problems() {
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/';
-        axios.get(real_url).then(resp => {
+        axios.get(search_url + 0 + '/').then(resp => {
             console.log(resp.data.problem)
             setProblems([...resp.data.problem]);
             setLoad(false)

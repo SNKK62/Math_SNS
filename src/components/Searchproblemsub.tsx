@@ -56,8 +56,7 @@ function Searchproblemsub(props: Props) {
     useEffect(() => {
         setLoad(true)
         setTimes(0)
-        real_url = search_url + 0 + '/' + props.keyword;
-        axios.get(real_url).then(resp => {
+        axios.get(search_url + 0 + '/' + props.keyword).then(resp => {
             setProblems([...resp.data.problem]);
             setLoad(false)
             if (resp.data.ifend) {

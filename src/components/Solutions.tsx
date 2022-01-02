@@ -51,8 +51,7 @@ function Solutions() {
     
     useEffect(() => {
         setTimes(0)
-        real_url = url+'/problems/'+id+'/solutions/' + '0';
-        axios.get(real_url).then(resp => {
+        axios.get(url+'/problems/'+id+'/solutions/0').then(resp => {
             setProblems([...resp.data.solution]);
             setLoad(false)
             if (resp.data.ifend) {

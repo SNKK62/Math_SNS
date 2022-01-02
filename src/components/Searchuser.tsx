@@ -33,15 +33,13 @@ function Searchuser() {
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
-    var real_url = ''
     const navigate = useNavigate();
     
     const query = new URLSearchParams(useLocation().search)
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/' + query.get('keyword');
-        axios.get(real_url).then(resp => {
+        axios.get(query.get('keyword') ? search_url + String(times+1) + '/' + query.get('keyword') : search_url + String(times+1) + '/' ).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
             if (resp.data.ifend) {
@@ -59,10 +57,9 @@ function Searchuser() {
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times+1) + '/' + query.get('keyword');
         setTimes(times + 1)
         console.log(users)
-        axios.get(real_url).then(resp => {
+        axios.get(query.get('keyword') ? search_url + String(times+1) + '/' + query.get('keyword') : search_url + String(times+1) + '/' ).then(resp => {
             setUsers([...users,...resp.data.user]);
             setCircular(false)
             if (resp.data.ifend) {

@@ -40,8 +40,7 @@ function Searchuser() {
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/' ;
-        axios.get(real_url).then(resp => {
+        axios.get(search_url + 0 + '/' ).then(resp => {
             setUsers([...resp.data.user]);
             setLoad(false)
             if (resp.data.ifend) {

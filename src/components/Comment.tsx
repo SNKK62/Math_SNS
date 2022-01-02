@@ -116,7 +116,7 @@ function Comment(props: Props) {
         }).catch(e => {
             console.log(e);
         })
-    }, [id])
+    }, [comment_url,id])
     const toproblem = () => {
         dispatch({ type: 'init', payload: '' })
         if (dataState.post.comment.problem_id) {

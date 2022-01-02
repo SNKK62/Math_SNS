@@ -47,7 +47,7 @@ function Makecomment(props: Props) {
         if (!props.logged_in.bool) {
             navigate('/login',{replace: true})
         }
-    },[])
+    },[navigate,props.logged_in.bool])
     
     const handle = () => {
         setLoad(true);

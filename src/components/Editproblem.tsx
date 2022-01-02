@@ -162,7 +162,7 @@ function Editproblem(props: Props) {
         }).catch(e => {
             console.log(e);
         })
-    }, [])
+    }, [props.logged_in.id, navigate, id, get_url])
     useEffect(() => {
         return() => {
             clearTimeout(timer.current);

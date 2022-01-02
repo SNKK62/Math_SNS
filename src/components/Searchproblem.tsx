@@ -39,14 +39,12 @@ function Searchproblem() {
     const [load, setLoad] = useState(true)
     const [circular, setCircular] = useState(false);
     const [disable, setDisable] = useState(false);
-    var real_url = ''
     const navigate = useNavigate()
     const query = new URLSearchParams(useLocation().search)
     
     useEffect(() => {
         setTimes(0)
-        real_url = search_url + 0 + '/' + query.get('keyword');
-        axios.get(real_url).then(resp => {
+        axios.get(query.get('keyword') ? search_url + 0 + '/' + query.get('keyword') : search_url+0+'/').then(resp => {
             setProblems([...resp.data.problem]);
             setLoad(false)
             if (resp.data.ifend) {
@@ -56,7 +54,7 @@ function Searchproblem() {
             console.log(e)
             setTimes(0)
         })
-    }, []);
+    }, [query.get('keyword')]);
     
     const toProblem = (id: number) => {
         navigate('/problems/'+String(id))
@@ -64,9 +62,8 @@ function Searchproblem() {
     
     const handlescroll = () => {
         setCircular(true)
-        real_url = search_url + String(times+1) + '/' + query.get('keyword');
         setTimes(times + 1)
-        axios.get(real_url).then(resp => {
+        axios.get(query.get('keyword') ? search_url + 0 + '/' + query.get('keyword') : search_url+0+'/').then(resp => {
             setProblems([...problems,...resp.data.problem]);
             setCircular(false)
             if (resp.data.ifend) {

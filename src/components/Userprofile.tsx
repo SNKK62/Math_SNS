@@ -115,9 +115,7 @@ function Userprofile(props: Props) {
     const [follow, setFollow] = useState(false)
     const [dataState, dispatch] = useReducer(dataFetch, initialState);
     useEffect(() => {
-        if (!dataState.post.isLoading) {
-            dispatch({type: 'init', payload: ''})
-        }
+        dispatch({type: 'init', payload: ''})
         window.scroll({top: 0, behavior: 'smooth'});
         axios.get(user_url).then(resp => {
             dispatch({ type: 'success', payload: resp.data })
@@ -133,7 +131,7 @@ function Userprofile(props: Props) {
                 setLoad(false)
             })
         }
-    }, [id])
+    }, [id,user_url,props.logged_in.id,props.logged_in.bool])
     const handlefollow = (bool: boolean) => {
         setLoad(true)
         if (bool) {

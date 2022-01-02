@@ -161,10 +161,10 @@ const Signup: React.FC<Props> = (props) => {
         }
         console.log(image.files[0])
         console.log(data)
-        axios.post(create_url, data, { withCredentials: true }).then(resp => {
+        axios.post(create_url, data).then(resp => {
             setLoad(false)
             const id = resp.data.user.id
-            axios.get(url + '/logged_in', { withCredentials: true }).then(resp => {
+            axios.get(url + '/logged_in').then(resp => {
                 props.setLogged_in(resp.data)
                 navigate('/users/' + id);
             }).catch(e => {
@@ -189,7 +189,7 @@ const Signup: React.FC<Props> = (props) => {
    
     return (
         <Wrapper>
-            <Message><Latex>$Sign$  $up$</Latex></Message>
+            <Message><Latex>$Sign$ $up$</Latex></Message>
             <Filewrapper2>
                 <Filewrapper htmlFor='fileinput'>
                     <Preview src={imgurl}  />

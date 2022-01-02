@@ -125,7 +125,7 @@ function Edituser(props: Props) {
         }).catch(e => {
             console.log(e);
         })
-    }, [id])
+    }, [id,navigate,user_url,props.logged_in.bool,props.logged_in.id])
     const imghandle = (e:any) => {
         if (e.target.files[0]) {
             setIfdefault('nondefault');

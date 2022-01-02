@@ -50,8 +50,7 @@ function Userproblems() {
     
     useEffect(() => {
         setTimes(0)
-        real_url = url+'/users/'+id+'/problems/' + '0';
-        axios.get(real_url).then(resp => {
+        axios.get(url+'/users/'+id+'/problems/0').then(resp => {
             setProblems([...resp.data.problem]);
             setLoad(false)
             if (resp.data.ifend) {
