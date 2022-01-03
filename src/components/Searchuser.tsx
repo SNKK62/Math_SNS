@@ -22,6 +22,12 @@ const Loading2 = styled(Loading)`
     height: 100%;
     width: 100%;
 `
+const Loadingwrapper2 = styled(Loadingwrapper)`
+    height: calc(100vh - 114px);
+    position: fixed;
+    right: 0;
+    top: 114px;
+`
 
 
 
@@ -75,9 +81,9 @@ function Searchuser() {
         <>
         
             {load ? 
-            <Loadingwrapper>
+            <Loadingwrapper2>
                 <Loading2 />
-            </Loadingwrapper>
+            </Loadingwrapper2>
             :
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >

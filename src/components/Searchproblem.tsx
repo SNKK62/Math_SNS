@@ -29,6 +29,12 @@ const Count = styled.div`
     font-size: 12px;
     padding-right: 15px;
 `
+const Loadingwrapper2 = styled(Loadingwrapper)`
+    height: calc(100vh - 114px);
+    position: fixed;
+    right: 0;
+    top: 114px;
+`
 
 
 
@@ -78,9 +84,9 @@ function Searchproblem() {
     return (
         <>
             {load ? 
-            <Loadingwrapper>
+            <Loadingwrapper2>
                 <Loading2 />
-            </Loadingwrapper>
+            </Loadingwrapper2>
             :
                 
                     <List  sx={{ paddingTop: '0' ,marginTop: '0'}} >
