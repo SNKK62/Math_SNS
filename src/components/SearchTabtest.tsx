@@ -40,7 +40,7 @@ const Searchwrapper = styled.div`
     height: 50px;
     position: fixed;
     top: 64px;
-    right: 0;
+    left: 35vw;
     box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
     border-left: 1px solid rgb(200,200,200);
 
