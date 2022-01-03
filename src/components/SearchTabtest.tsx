@@ -34,15 +34,15 @@ const SearchInput = styled(InputBase)`
     align-items: center;
 `
 const Searchwrapper = styled.div`
-    width: 35vw;
+    width: 30vw;
     background: white;
     z-index: 20;
     height: 50px;
     position: fixed;
     top: 64px;
-    left: 65vw;
+    left: 70vw;
     box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
-    border-left: 1px solid rgb(200,200,200);
+    // border-left: 1px solid rgb(200,200,200);
 
 `
 const Wrapper2 = styled.div`
@@ -56,6 +56,8 @@ const Wrapper2 = styled.div`
 const Allwrapper = styled.div`
     min-height: calc(100vh - 64px);
     width: 35vw;
+    scrollbar-width: none;
+
 `
 
 
