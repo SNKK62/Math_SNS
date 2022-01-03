@@ -98,6 +98,12 @@ interface Props {
         image: string,
         name: string
     }
+    setLogged_in: React.Dispatch<React.SetStateAction<{
+        bool: boolean;
+        id: number;
+        image: string;
+        name: string;
+    }>>
 }
 function Edituser(props: Props) {
     const [loading, setLoading] = useState(false);
@@ -159,9 +165,14 @@ function Edituser(props: Props) {
             data.append('user[description]', text)
         }
         axios.patch(user_url, data).then(resp => {
-            setLoading(false);
-            const new_id = resp.data.user.id;
-            navigate('/users/'+new_id)
+            axios.get(url + '/logged_in').then(subresp => {
+                props.setLogged_in({ bool: subresp.data.bool, id: subresp.data.id, image: subresp.data.image, name: subresp.data.name });
+                setLoading(false);
+                const new_id = resp.data.user.id;
+                navigate('/users/' + new_id)
+            }).catch(e => {
+                console.log(e)
+            })
         }).catch(e => {
             setError('exist')
             console.log(e.response.data.error);

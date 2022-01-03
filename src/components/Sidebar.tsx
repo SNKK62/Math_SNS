@@ -34,7 +34,7 @@ function Sidebar(props: Props) {
   const navigate = useNavigate()
   const toPage = (s: string) => {
     if (s === 'プロフィール') {
-      navigate('/')
+      navigate('/users/'+props.logged_in.id)
     } else if (s === 'いいねした問題') {
       navigate('/users/like_problems')
     } else if (s === 'いいねした解答') {

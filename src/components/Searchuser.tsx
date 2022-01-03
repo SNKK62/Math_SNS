@@ -23,7 +23,7 @@ const Loading2 = styled(Loading)`
     width: 100%;
 `
 const Loadingwrapper2 = styled(Loadingwrapper)`
-    height: calc(100vh - 64px);
+    height: calc(100vh - 114px);
 `
 
 

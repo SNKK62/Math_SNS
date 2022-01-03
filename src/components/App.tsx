@@ -30,7 +30,9 @@ import Loadingwrapper from './Loadingwrapper';
 import Loading from './Loading';
 import Follow from './Follow';
 import Likeproblem from './Likeproblem';
-import Likesolution from './Likesolution'
+import Likesolution from './Likesolution';
+import Default from './Default';
+import Logo from './Logo';
 
 const Appwrapper = styled.div`
   width: 100vw;
@@ -107,7 +109,7 @@ const App: React.VFC = () => {
   
   return (
     <>
-      {!load && <>
+      {load ? <Logo/> : <>
         <Appbar logged_in={logged_in} handledelete={handledelete} />
         <Appwrapper>
         <Border/>
@@ -119,7 +121,7 @@ const App: React.VFC = () => {
             <Loading />
           </Loadingwrapper2> }
             <Routes >
-              <Route path="/" element={logged_in.bool ? <Users /> : <Login logged_in={logged_in} setLogged_in={setLogged_in} />} />
+              <Route path="/" element={ <Default logged_in={logged_in} />} />
               <Route path="/login" element={<Login logged_in={logged_in} setLogged_in={setLogged_in} />} />
               <Route path='/signup' element={<Signup logged_in={logged_in} setLogged_in={setLogged_in} />} />
               <Route path="/users" element={<Users />} />
@@ -127,7 +129,7 @@ const App: React.VFC = () => {
               <Route path="/users/:id" element={<Userprofile logged_in={logged_in} />} />
               <Route path="/users/:id/followers" element={<Follow iffollower={true}/>}/>
               <Route path="/users/:id/followings" element={<Follow iffollower={false}/>}/>
-              <Route path="/users/:id/edit" element={<Edituser logged_in={logged_in} />} />
+              <Route path="/users/:id/edit" element={<Edituser logged_in={logged_in} setLogged_in={setLogged_in}/>} />
               <Route path="/users/like_problems" element={<Likeproblem logged_in={ logged_in}/> }/>
               <Route path="/users/like_solutions" element={<Likesolution logged_in={logged_in}/>}/>
               <Route path="/problems/new" element={<Makeproblem logged_in={logged_in} />} />

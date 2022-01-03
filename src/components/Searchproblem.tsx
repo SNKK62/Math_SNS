@@ -30,7 +30,7 @@ const Count = styled.div`
     padding-right: 15px;
 `
 const Loadingwrapper2 = styled(Loadingwrapper)`
-    height: calc(100vh - 64px);
+    height: calc(100vh - 114px);
 `
 
 
