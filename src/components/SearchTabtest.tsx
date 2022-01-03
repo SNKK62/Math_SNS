@@ -40,7 +40,7 @@ const Searchwrapper = styled.div`
     height: 50px;
     position: fixed;
     top: 64px;
-    left: 35vw;
+    left: 65vw;
     box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
     border-left: 1px solid rgb(200,200,200);
 
@@ -54,7 +54,7 @@ const Wrapper2 = styled.div`
     margin-top: 50px;
 `
 const Allwrapper = styled.div`
-    height: calc(100vh-64px);
+    min-height: calc(100vh - 64px);
     width: 35vw;
 `
 
