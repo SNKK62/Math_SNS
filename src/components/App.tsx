@@ -89,7 +89,7 @@ const App: React.VFC = () => {
   useEffect(() => {
     axios.get(url + '/logged_in').then(resp => {
       setLogged_in({ bool: resp.data.bool, id: resp.data.id ,image: resp.data.image, name: resp.data.name});
-      setLoad(false);
+      window.setTimeout(() => { setLoad(false); },1000)
     }).catch(e => {
       console.log(e)
     })
