@@ -42,7 +42,7 @@ const Searchwrapper = styled.div`
     top: 64px;
     left: 65vw;
     box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
-    border-left: 1px solid rgb(200,200,200);
+    // border-left: 1px solid rgb(200,200,200);
 
 `
 const Wrapper2 = styled.div`
