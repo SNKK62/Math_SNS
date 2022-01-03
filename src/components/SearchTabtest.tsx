@@ -34,13 +34,13 @@ const SearchInput = styled(InputBase)`
     align-items: center;
 `
 const Searchwrapper = styled.div`
-    width: 30vw;
+    width: calc(35vw - 1px);
     background: white;
     z-index: 20;
     height: 50px;
     position: fixed;
     top: 64px;
-    left: 70vw;
+    left: calc(65vw + 1px);
     box-shadow: 0px 2px 1px 0 rgb(100,100,100,0.2) inset;
     // border-left: 1px solid rgb(200,200,200);
 
