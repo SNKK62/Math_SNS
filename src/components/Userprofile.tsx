@@ -71,6 +71,7 @@ const Followbutton = styled.div`
 `
 const Allwrapper = styled.div`
 width: 100%;
+min-height: 100vh;
     @media(min-width: 600px){
         width: 60vw;
         box-sizing: border-box;
